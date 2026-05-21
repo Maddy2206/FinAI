@@ -17,9 +17,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "FinanceAI — Smart Money Management",
+  title: "FinAI — Smart Money Management",
   description:
-    "AI-powered personal finance management with receipt scanning, smart budgets, and weekly insights",
+    "Smart personal finance management with receipt scanning, intelligent budgets, and weekly insights",
 };
 
 export default function RootLayout({

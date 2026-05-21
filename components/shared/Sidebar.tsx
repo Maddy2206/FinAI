@@ -10,6 +10,7 @@ import {
   Bot,
   FileText,
   Wallet,
+  TrendingUp,
   X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -38,9 +39,9 @@ export function Sidebar({ onClose }: SidebarProps) {
       <div className="flex items-center justify-between px-6 py-5 border-b border-border">
         <div className="flex items-center gap-2">
           <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
-            <Wallet className="h-4 w-4 text-primary-foreground" />
+            <TrendingUp className="h-4 w-4 text-primary-foreground" />
           </div>
-          <span className="font-bold text-lg text-foreground">FinanceAI</span>
+          <span className="font-bold text-lg text-foreground">FinAI</span>
         </div>
         {onClose && (
           <button onClick={onClose} className="lg:hidden text-muted-foreground hover:text-foreground">

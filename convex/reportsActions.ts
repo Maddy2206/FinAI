@@ -117,13 +117,13 @@ h1 { color: #818cf8; font-size: 24px; margin: 0 0 8px; }
     <div class="stat-value">₹${args.totalSpent.toLocaleString("en-IN")}</div>
   </div>
   <div class="report">${args.reportContent}</div>
-  <div class="footer">FinanceAI — Your AI-powered finance companion</div>
+  <div class="footer">FinAI — Your smart finance companion</div>
 </div>
 </body>
 </html>`;
 
     await resend.emails.send({
-      from: "FinanceAI <reports@financeai.app>",
+      from: "FinAI <reports@finai.app>",
       to: args.email,
       subject: `Weekly Report: ${args.weekStart} – ${args.weekEnd} | ₹${args.totalSpent.toLocaleString("en-IN")} spent`,
       html,

@@ -41,7 +41,7 @@ export function FinancialHealthScore({ score }: FinancialHealthScoreProps) {
               cy="70"
               r={radius}
               fill="none"
-              stroke="hsl(var(--border))"
+              stroke="var(--border)"
               strokeWidth="10"
             />
             {/* Progress */}

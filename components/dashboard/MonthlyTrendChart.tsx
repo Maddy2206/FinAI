@@ -46,30 +46,30 @@ export function MonthlyTrendChart({ data }: MonthlyTrendChartProps) {
       <CardContent>
         <ResponsiveContainer width="100%" height={220}>
           <ComposedChart data={chartData} margin={{ top: 5, right: 5, bottom: 5, left: 0 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
+            <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
             <XAxis
               dataKey="month"
               tickFormatter={(v) => {
                 const [, m] = v.split("-");
                 return format(new Date(2024, Number(m) - 1), "MMM");
               }}
-              tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
+              tick={{ fontSize: 11, fill: "var(--muted-foreground)" }}
               axisLine={false}
               tickLine={false}
             />
             <YAxis
               tickFormatter={(v) => `₹${v >= 1000 ? (v / 1000).toFixed(0) + "k" : v}`}
-              tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
+              tick={{ fontSize: 11, fill: "var(--muted-foreground)" }}
               axisLine={false}
               tickLine={false}
               width={45}
             />
-            <Tooltip content={<CustomTooltip />} cursor={{ fill: "hsl(var(--accent))" }} />
-            <Bar dataKey="total" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} opacity={0.8} />
+            <Tooltip content={<CustomTooltip />} cursor={{ fill: "var(--accent)" }} />
+            <Bar dataKey="total" fill="var(--primary)" radius={[4, 4, 0, 0]} opacity={0.8} />
             <Line
               type="monotone"
               dataKey="total"
-              stroke="hsl(var(--primary))"
+              stroke="var(--primary)"
               strokeWidth={2}
               dot={false}
             />

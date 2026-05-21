@@ -63,14 +63,14 @@ export default function AnalyticsPage() {
           <CardContent>
             <ResponsiveContainer width="100%" height={220}>
               <BarChart data={categorySummary ?? []} margin={{ top: 5, right: 5, bottom: 5, left: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
-                <XAxis dataKey="category" tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} axisLine={false} tickLine={false} />
-                <YAxis tickFormatter={(v) => `₹${v >= 1000 ? (v / 1000).toFixed(0) + "k" : v}`} tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} axisLine={false} tickLine={false} width={45} />
-                <Tooltip content={<CustomTooltip />} cursor={{ fill: "hsl(var(--accent))" }} />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
+                <XAxis dataKey="category" tick={{ fontSize: 11, fill: "var(--muted-foreground)" }} axisLine={false} tickLine={false} />
+                <YAxis tickFormatter={(v) => `₹${v >= 1000 ? (v / 1000).toFixed(0) + "k" : v}`} tick={{ fontSize: 11, fill: "var(--muted-foreground)" }} axisLine={false} tickLine={false} width={45} />
+                <Tooltip content={<CustomTooltip />} cursor={{ fill: "var(--accent)" }} />
                 <Bar
                   dataKey="total"
                   radius={[4, 4, 0, 0]}
-                  fill="hsl(var(--primary))"
+                  fill="var(--primary)"
                 />
               </BarChart>
             </ResponsiveContainer>
@@ -85,11 +85,11 @@ export default function AnalyticsPage() {
           <CardContent>
             <ResponsiveContainer width="100%" height={180}>
               <BarChart data={dayOfWeekData} margin={{ top: 5, right: 5, bottom: 5, left: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
-                <XAxis dataKey="day" tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} axisLine={false} tickLine={false} />
-                <YAxis tickFormatter={(v) => `₹${v >= 1000 ? (v / 1000).toFixed(0) + "k" : v}`} tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} axisLine={false} tickLine={false} width={45} />
-                <Tooltip content={<CustomTooltip />} cursor={{ fill: "hsl(var(--accent))" }} />
-                <Bar dataKey="total" radius={[4, 4, 0, 0]} fill="hsl(var(--chart-2))" />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
+                <XAxis dataKey="day" tick={{ fontSize: 11, fill: "var(--muted-foreground)" }} axisLine={false} tickLine={false} />
+                <YAxis tickFormatter={(v) => `₹${v >= 1000 ? (v / 1000).toFixed(0) + "k" : v}`} tick={{ fontSize: 11, fill: "var(--muted-foreground)" }} axisLine={false} tickLine={false} width={45} />
+                <Tooltip content={<CustomTooltip />} cursor={{ fill: "var(--accent)" }} />
+                <Bar dataKey="total" radius={[4, 4, 0, 0]} fill="var(--chart-2)" />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
@@ -103,17 +103,17 @@ export default function AnalyticsPage() {
           <CardContent>
             <ResponsiveContainer width="100%" height={200}>
               <LineChart data={monthlyTotals ?? []} margin={{ top: 5, right: 5, bottom: 5, left: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
                 <XAxis
                   dataKey="month"
                   tickFormatter={(v) => { const [, m] = v.split("-"); return format(new Date(2024, Number(m) - 1), "MMM"); }}
-                  tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
+                  tick={{ fontSize: 11, fill: "var(--muted-foreground)" }}
                   axisLine={false}
                   tickLine={false}
                 />
-                <YAxis tickFormatter={(v) => `₹${v >= 1000 ? (v / 1000).toFixed(0) + "k" : v}`} tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} axisLine={false} tickLine={false} width={45} />
+                <YAxis tickFormatter={(v) => `₹${v >= 1000 ? (v / 1000).toFixed(0) + "k" : v}`} tick={{ fontSize: 11, fill: "var(--muted-foreground)" }} axisLine={false} tickLine={false} width={45} />
                 <Tooltip content={<CustomTooltip />} />
-                <Line type="monotone" dataKey="total" stroke="hsl(var(--primary))" strokeWidth={2.5} dot={{ fill: "hsl(var(--primary))", r: 3 }} />
+                <Line type="monotone" dataKey="total" stroke="var(--primary)" strokeWidth={2.5} dot={{ fill: "var(--primary)", r: 3 }} />
               </LineChart>
             </ResponsiveContainer>
           </CardContent>
