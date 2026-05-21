@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/shared/ThemeToggle";
 import {
   TrendingUp, BarChart3, Bot, Receipt, Shield, Zap,
   ArrowRight, Sparkles, CheckCircle,
@@ -176,6 +177,7 @@ export default function HomePage() {
             </div>
 
             <div className="flex items-center gap-3">
+              <ThemeToggle />
               <Button variant="ghost" size="sm" asChild>
                 <Link href="/sign-in">Sign In</Link>
               </Button>

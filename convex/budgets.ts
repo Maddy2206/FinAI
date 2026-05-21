@@ -1,4 +1,4 @@
-import { mutation, query } from "./_generated/server";
+import { mutation, query, internalQuery } from "./_generated/server";
 import { v } from "convex/values";
 
 const categoryValidator = v.union(
@@ -115,6 +115,34 @@ export const getBudgetUtilization = query({
       ...b,
       spent: spentByCategory[b.category] ?? 0,
       percentage: Math.round(((spentByCategory[b.category] ?? 0) / b.monthlyLimit) * 100),
+    }));
+  },
+});
+
+export const getBudgetsForUser = internalQuery({
+  args: { userId: v.id("users"), month: v.string() },
+  handler: async (ctx, args) => {
+    const budgets = await ctx.db
+      .query("budgets")
+      .withIndex("by_user", (q) => q.eq("userId", args.userId))
+      .collect();
+    const [year, monthNum] = args.month.split("-").map(Number);
+    const start = new Date(year, monthNum - 1, 1).getTime();
+    const end = new Date(year, monthNum, 0, 23, 59, 59, 999).getTime();
+    const expenses = await ctx.db
+      .query("expenses")
+      .withIndex("by_user_date", (q) =>
+        q.eq("userId", args.userId).gte("date", start).lte("date", end)
+      )
+      .collect();
+    const spentByCategory: Record<string, number> = {};
+    for (const e of expenses) {
+      spentByCategory[e.category] = (spentByCategory[e.category] ?? 0) + e.amount;
+    }
+    return budgets.map((b) => ({
+      category: b.category,
+      monthlyLimit: b.monthlyLimit,
+      spent: spentByCategory[b.category] ?? 0,
     }));
   },
 });
