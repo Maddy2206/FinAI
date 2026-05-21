@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { useQuery, useMutation, useAction } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Header } from "@/components/shared/Header";
@@ -38,17 +37,21 @@ export default function ReceiptsPage() {
       <Header title="Receipt Scanner" />
       <div className="flex-1 overflow-y-auto p-6 space-y-6">
         {/* Upload area */}
-        <Card className="border-border/50 border-dashed">
-          <CardContent className="p-6">
+        <Card className="border-border/50">
+          <CardContent className="p-5">
             <p className="text-sm font-medium text-foreground mb-1">Upload Receipt</p>
-            <p className="text-xs text-muted-foreground mb-4">
-              AI will extract the merchant, amount, date, and auto-categorize the expense.
-            </p>
+            <p className="text-xs text-muted-foreground mb-3">AI will extract merchant, amount, date and auto-categorize the expense.</p>
             <UploadDropzone
               endpoint="receiptUploader"
               onClientUploadComplete={handleUploadComplete}
               onUploadError={(err: { message: string }) => { toast.error(err.message); }}
-              className="ut-label:text-foreground ut-allowed-content:text-muted-foreground ut-button:bg-primary ut-button:text-primary-foreground"
+              appearance={{
+                container: "border border-dashed border-border/60 rounded-xl bg-muted/20 hover:bg-muted/40 transition-colors h-40 flex flex-col items-center justify-center gap-2 cursor-pointer mt-0",
+                uploadIcon: "h-8 w-8 text-muted-foreground mb-1",
+                label: "text-sm text-foreground font-medium",
+                allowedContent: "text-xs text-muted-foreground",
+                button: "bg-primary text-primary-foreground text-xs font-medium h-8 px-4 rounded-lg mt-1",
+              }}
             />
           </CardContent>
         </Card>
@@ -70,7 +73,6 @@ export default function ReceiptsPage() {
             {receipts.map((receipt: any) => (
               <Card key={receipt._id} className="border-border/50">
                 <CardContent className="p-4 flex gap-4">
-                  {/* Thumbnail */}
                   <div className="h-16 w-16 rounded-lg overflow-hidden bg-muted shrink-0">
                     <img
                       src={receipt.fileUrl}
