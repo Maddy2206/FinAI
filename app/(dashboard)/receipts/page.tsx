@@ -70,7 +70,7 @@ export default function ReceiptsPage() {
           </div>
         ) : (
           <div className="space-y-3">
-            {receipts.map((receipt: any) => (
+            {receipts.map((receipt) => (
               <Card key={receipt._id} className="border-border/50">
                 <CardContent className="p-4 flex gap-4">
                   <div className="h-16 w-16 rounded-lg overflow-hidden bg-muted shrink-0">

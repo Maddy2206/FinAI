@@ -28,9 +28,9 @@ export default function DashboardPage() {
     recentExpenses === undefined ||
     healthScore === undefined;
 
-  const totalSpent = categorySummary?.reduce((s: number, c: any) => s + c.total, 0) ?? 0;
-  const totalBudget = budgetUtilization?.reduce((s: number, b: any) => s + b.monthlyLimit, 0) ?? 0;
-  const topCategory = categorySummary?.sort((a: any, b: any) => b.total - a.total)[0]?.category ?? "—";
+  const totalSpent = categorySummary?.reduce((s, c) => s + c.total, 0) ?? 0;
+  const totalBudget = budgetUtilization?.reduce((s, b) => s + b.monthlyLimit, 0) ?? 0;
+  const topCategory = categorySummary?.slice().sort((a, b) => b.total - a.total)[0]?.category ?? "—";
 
   const currentMonthTotal = monthlyTotals?.[11]?.total ?? 0;
   const prevMonthTotal = monthlyTotals?.[10]?.total ?? 0;

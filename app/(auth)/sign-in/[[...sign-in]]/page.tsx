@@ -110,7 +110,7 @@ export default function SignInPage() {
                 <span className="accent-gradient">back.</span>
               </h1>
               <p className="fu3 text-sm xl:text-base leading-relaxed text-white/50 max-w-sm">
-                Your finances don't take a break — sign in to see where you stand and what's changed since your last visit.
+                Your finances don&apos;t take a break — sign in to see where you stand and what&apos;s changed since your last visit.
               </p>
             </div>
 

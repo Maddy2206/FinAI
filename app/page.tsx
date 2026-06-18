@@ -444,7 +444,7 @@ export default function HomePage() {
                   <span className="gradient-text">today</span>
                 </h2>
                 <p className="text-muted-foreground mb-10 max-w-md mx-auto leading-relaxed">
-                  Join thousands of Indians who've transformed their relationship with money using FinAI. It's free to start.
+                  Join thousands of Indians who&apos;ve transformed their relationship with money using FinAI. It&apos;s free to start.
                 </p>
                 <Button
                   size="lg"

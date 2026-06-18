@@ -12,6 +12,7 @@ import { NaturalLanguageInput } from "@/components/expenses/NaturalLanguageInput
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatCurrency, formatDate, getCurrentMonth } from "@/lib/utils";
 import { CATEGORY_COLORS, CATEGORY_ICONS } from "@/types";
+import { Id } from "@/convex/_generated/dataModel";
 import { Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
@@ -19,7 +20,7 @@ import { format } from "date-fns";
 export default function ExpensesPage() {
   const [month, setMonth] = useState(getCurrentMonth());
   const [open, setOpen] = useState(false);
-  const [prefill, setPrefill] = useState<any>(null);
+  const [prefill, setPrefill] = useState<{ amount?: number; category?: string; description?: string; date?: number } | null>(null);
   const expenses = useQuery(api.expenses.getExpensesByMonth, { month });
   const deleteExpense = useMutation(api.expenses.deleteExpense);
 
@@ -27,14 +28,14 @@ export default function ExpensesPage() {
 
   async function handleDelete(id: string) {
     try {
-      await deleteExpense({ id: id as any });
+      await deleteExpense({ id: id as Id<"expenses"> });
       toast.success("Deleted");
     } catch {
       toast.error("Failed to delete");
     }
   }
 
-  function handleNLPParsed(data: any) {
+  function handleNLPParsed(data: { amount: number; category: string; description: string; date: number }) {
     setPrefill(data);
     setOpen(true);
   }
@@ -95,7 +96,7 @@ export default function ExpensesPage() {
           </div>
         ) : (
           <div className="space-y-2">
-            {expenses.map((expense: any) => (
+            {expenses.map((expense) => (
               <div
                 key={expense._id}
                 className="flex items-center gap-3 bg-card border border-border/50 rounded-xl p-4 hover:border-border transition-colors"

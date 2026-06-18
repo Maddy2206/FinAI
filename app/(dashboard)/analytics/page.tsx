@@ -7,10 +7,9 @@ import { Header } from "@/components/shared/Header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid,
-  Tooltip, ResponsiveContainer, Legend
+  Tooltip, ResponsiveContainer
 } from "recharts";
 import { getCurrentMonth, formatCurrency } from "@/lib/utils";
-import { CATEGORY_COLORS } from "@/types";
 import { format } from "date-fns";
 
 export default function AnalyticsPage() {
@@ -31,9 +30,9 @@ export default function AnalyticsPage() {
   })();
 
   // Subscription detection
-  const subscriptions = allExpenses?.filter((e: any) => e.category === "Subscriptions") ?? [];
+  const subscriptions = allExpenses?.filter((e) => e.category === "Subscriptions") ?? [];
 
-  const CustomTooltip = ({ active, payload }: any) => {
+  const CustomTooltip = ({ active, payload }: { active?: boolean; payload?: Array<{ value: number }> }) => {
     if (active && payload?.length) {
       return (
         <div className="bg-card border border-border rounded-lg px-3 py-2 shadow-lg">
@@ -129,7 +128,7 @@ export default function AnalyticsPage() {
               <p className="text-sm text-muted-foreground">No subscriptions found</p>
             ) : (
               <div className="space-y-2">
-                {subscriptions.map((s: any) => (
+                {subscriptions.map((s) => (
                   <div key={s._id} className="flex justify-between items-center py-2 border-b border-border/50 last:border-0">
                     <div>
                       <p className="text-sm font-medium">{s.description}</p>

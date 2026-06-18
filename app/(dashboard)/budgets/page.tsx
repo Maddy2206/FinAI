@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { formatCurrency, getCurrentMonth } from "@/lib/utils";
-import { EXPENSE_CATEGORIES, CATEGORY_COLORS, CATEGORY_ICONS } from "@/types";
+import { EXPENSE_CATEGORIES, CATEGORY_ICONS, type ExpenseCategory } from "@/types";
 import { Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -29,7 +29,7 @@ export default function BudgetsPage() {
     e.preventDefault();
     if (!form.limit) return;
     try {
-      await setBudget({ category: form.category as any, monthlyLimit: parseFloat(form.limit), month });
+      await setBudget({ category: form.category as ExpenseCategory, monthlyLimit: parseFloat(form.limit), month });
       toast.success("Budget saved!");
       setOpen(false);
       setForm({ category: "Food", limit: "" });
@@ -38,8 +38,8 @@ export default function BudgetsPage() {
     }
   }
 
-  const totalBudget = budgets?.reduce((s: number, b: any) => s + b.monthlyLimit, 0) ?? 0;
-  const totalSpent = budgets?.reduce((s: number, b: any) => s + b.spent, 0) ?? 0;
+  const totalBudget = budgets?.reduce((s, b) => s + b.monthlyLimit, 0) ?? 0;
+  const totalSpent = budgets?.reduce((s, b) => s + b.spent, 0) ?? 0;
   const overallPct = totalBudget > 0 ? Math.round((totalSpent / totalBudget) * 100) : 0;
 
   return (
@@ -129,11 +129,11 @@ export default function BudgetsPage() {
         ) : budgets.length === 0 ? (
           <div className="text-center py-16 text-muted-foreground">
             <p>No budgets set for {format(new Date(month + "-01"), "MMMM yyyy")}</p>
-            <p className="text-sm mt-1">Click "Set Budget" to get started</p>
+            <p className="text-sm mt-1">Click &quot;Set Budget&quot; to get started</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {budgets.map((b: any) => {
+            {budgets.map((b) => {
               const pct = Math.min(100, b.percentage);
               const isDanger = pct >= 90;
               const isWarning = pct >= 70 && pct < 90;
@@ -150,7 +150,7 @@ export default function BudgetsPage() {
                         <span className="font-semibold text-sm">{b.category}</span>
                       </div>
                       <button
-                        onClick={() => deleteBudget({ id: b._id as any })}
+                        onClick={() => deleteBudget({ id: b._id })}
                         className="text-muted-foreground hover:text-destructive transition-colors"
                       >
                         <Trash2 className="h-3.5 w-3.5" />

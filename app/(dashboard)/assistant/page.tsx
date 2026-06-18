@@ -12,6 +12,12 @@ import { Send, Sparkles, Bot, User, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
+interface ChatMessage {
+  _id: string;
+  role: "user" | "assistant";
+  content: string;
+}
+
 const SUGGESTED_QUERIES = [
   "Why did I overspend this month?",
   "How can I save ₹5,000 more?",
@@ -80,10 +86,10 @@ export default function AssistantPage() {
             </div>
           ) : (
             <>
-              {messages.map((msg: any) => (
+              {(messages as ChatMessage[]).map((msg) => (
                 <div
                   key={msg._id}
-                  className={cn("flex gap-3 max-w-3xl", (msg as any).role === "user" ? "ml-auto flex-row-reverse" : "")}
+                  className={cn("flex gap-3 max-w-3xl", msg.role === "user" ? "ml-auto flex-row-reverse" : "")}
                 >
                   <div className={cn(
                     "h-8 w-8 rounded-full flex items-center justify-center shrink-0 mt-0.5",
@@ -97,11 +103,11 @@ export default function AssistantPage() {
                   </div>
                   <div className={cn(
                     "rounded-2xl px-4 py-3 text-sm max-w-[80%]",
-                    (msg as any).role === "user"
+                    msg.role === "user"
                       ? "bg-primary text-primary-foreground"
                       : "bg-card border border-border text-foreground"
                   )}>
-                    {(msg as any).role === "assistant" ? (
+                    {msg.role === "assistant" ? (
                       <div className="prose prose-sm dark:prose-invert max-w-none [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
                         <ReactMarkdown>{msg.content}</ReactMarkdown>
                       </div>

@@ -13,6 +13,7 @@ import { Sparkles, Mail, Trash2, ChevronDown, ChevronUp } from "lucide-react";
 import { toast } from "sonner";
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
+import { Id } from "@/convex/_generated/dataModel";
 
 export default function ReportsPage() {
   const reports        = useQuery(api.reports.getWeeklyReports);
@@ -27,8 +28,8 @@ export default function ReportsPage() {
     try {
       await generateReport();
       toast.success("Report generated! Check your inbox for the PDF.");
-    } catch (e: any) {
-      const msg = e?.message ?? "";
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : "";
       if (msg.includes("Email failed")) {
         toast.warning("Report saved, but email failed — check Convex logs for details.");
       } else {
@@ -42,7 +43,7 @@ export default function ReportsPage() {
   async function handleDelete(id: string) {
     setDeleting(id);
     try {
-      await deleteReport({ id: id as any });
+      await deleteReport({ id: id as Id<"reports"> });
       toast.success("Report deleted");
       if (expanded === id) setExpanded(null);
     } catch {
@@ -78,11 +79,11 @@ export default function ReportsPage() {
           <div className="text-center py-16 text-muted-foreground">
             <Sparkles className="h-10 w-10 mx-auto mb-3 opacity-30" />
             <p className="font-medium">No reports yet</p>
-            <p className="text-sm mt-1">Click "Generate Now" to create your first weekly report</p>
+            <p className="text-sm mt-1">Click &quot;Generate Now&quot; to create your first weekly report</p>
           </div>
         ) : (
           <div className="space-y-3">
-            {reports.map((report: any) => (
+            {reports.map((report) => (
               <Card key={report._id} className="border-border/50">
                 <CardHeader className="pb-3">
                   <div className="flex items-start justify-between gap-3">
