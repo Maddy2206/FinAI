@@ -25,7 +25,7 @@ interface CustomTooltipProps {
 }
 
 const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
-  if (active && payload && payload.length) {
+  if (active && payload && payload.length && label) {
     const [year, month] = label.split("-");
     const date = new Date(Number(year), Number(month) - 1);
     return (
