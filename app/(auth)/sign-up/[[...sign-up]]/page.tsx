@@ -198,7 +198,7 @@ export default function SignUpPage() {
                 <p className="text-sm text-gray-500 mt-1">Start managing your finances smarter today.</p>
               </div>
 
-              <SignUp />
+              <SignUp forceRedirectUrl="/dashboard" />
 
               <p className="mt-5 text-center text-xs text-gray-400">
                 Already have an account?{" "}

@@ -198,7 +198,7 @@ export default function SignInPage() {
                 <p className="text-sm text-gray-500 mt-1">Welcome back — your dashboard is waiting.</p>
               </div>
 
-              <SignIn />
+              <SignIn forceRedirectUrl="/dashboard" />
 
               <p className="mt-5 text-center text-xs text-gray-400">
                 Don&apos;t have an account?{" "}
