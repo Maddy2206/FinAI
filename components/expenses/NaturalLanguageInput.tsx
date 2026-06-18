@@ -23,7 +23,7 @@ export function NaturalLanguageInput({ onParsed }: NaturalLanguageInputProps) {
     try {
       const result = await parseExpense({ text });
       if (result) {
-        onParsed(result as any);
+        onParsed(result);
         setText("");
         toast.success("Expense parsed! Review and confirm.");
       } else {

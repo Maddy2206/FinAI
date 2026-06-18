@@ -6,7 +6,7 @@ import { api } from "@/convex/_generated/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { EXPENSE_CATEGORIES } from "@/types";
+import { EXPENSE_CATEGORIES, type ExpenseCategory } from "@/types";
 import { toast } from "sonner";
 import { format } from "date-fns";
 
@@ -39,7 +39,7 @@ export function ExpenseForm({ onSuccess, initial }: ExpenseFormProps) {
     try {
       await addExpense({
         amount: parseFloat(form.amount),
-        category: form.category as any,
+        category: form.category as ExpenseCategory,
         description: form.description,
         date: new Date(form.date).getTime(),
         isRecurring: form.isRecurring,

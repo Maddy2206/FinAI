@@ -18,7 +18,13 @@ interface MonthlyTrendChartProps {
   data: { month: string; total: number }[];
 }
 
-const CustomTooltip = ({ active, payload, label }: any) => {
+interface CustomTooltipProps {
+  active?: boolean;
+  payload?: Array<{ value: number }>;
+  label?: string;
+}
+
+const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
   if (active && payload && payload.length) {
     const [year, month] = label.split("-");
     const date = new Date(Number(year), Number(month) - 1);

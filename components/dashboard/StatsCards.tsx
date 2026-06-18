@@ -18,7 +18,6 @@ export function StatsCards({
   totalBudget,
   topCategory,
   monthOverMonthChange,
-  healthScore,
 }: StatsCardsProps) {
   const saved = totalBudget > 0 ? totalBudget - totalSpent : 0;
   const isOverBudget = saved < 0;
