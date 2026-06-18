@@ -10,6 +10,7 @@ import { UploadDropzone } from "@/lib/uploadthing";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { toast } from "sonner";
 import { CheckCircle, XCircle, Loader2, Receipt } from "lucide-react";
+import Image from "next/image";
 
 export default function ReceiptsPage() {
   const receipts = useQuery(api.receipts.getReceiptsByUser);
@@ -74,9 +75,11 @@ export default function ReceiptsPage() {
               <Card key={receipt._id} className="border-border/50">
                 <CardContent className="p-4 flex gap-4">
                   <div className="h-16 w-16 rounded-lg overflow-hidden bg-muted shrink-0">
-                    <img
+                    <Image
                       src={receipt.fileUrl}
                       alt="Receipt"
+                      width={64}
+                      height={64}
                       className="h-full w-full object-cover"
                     />
                   </div>

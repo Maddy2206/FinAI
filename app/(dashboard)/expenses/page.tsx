@@ -63,7 +63,7 @@ export default function ExpensesPage() {
                 <DialogHeader>
                   <DialogTitle>Add Expense</DialogTitle>
                 </DialogHeader>
-                <ExpenseForm initial={prefill} onSuccess={() => setOpen(false)} />
+                <ExpenseForm initial={prefill ?? undefined} onSuccess={() => setOpen(false)} />
               </DialogContent>
             </Dialog>
           </div>
