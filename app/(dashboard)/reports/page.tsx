@@ -43,7 +43,7 @@ export default function ReportsPage() {
   async function handleDelete(id: string) {
     setDeleting(id);
     try {
-      await deleteReport({ id: id as Id<"reports"> });
+      await deleteReport({ id: id as Id<"weekly_reports"> });
       toast.success("Report deleted");
       if (expanded === id) setExpanded(null);
     } catch {
