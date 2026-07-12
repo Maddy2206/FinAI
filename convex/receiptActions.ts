@@ -30,11 +30,16 @@ export const processReceiptOCR = action({
     }
     let rawOcrText = "";
     try {
-      const ocrRes = await fetch("https://api.ocr.space/parse/imageurl", {
+      // OCR.space has a single endpoint (/parse/image) for both file and
+      // URL-based OCR — which mode it runs depends on whether `url`, `file`,
+      // or `base64Image` is present in the body, not the URL path.
+      const ocrRes = await fetch("https://api.ocr.space/parse/image", {
         method: "POST",
         headers: {
           "apikey": process.env.OCR_SPACE_API_KEY ?? "helloworld",
           "Content-Type": "application/x-www-form-urlencoded",
+          "User-Agent": "FinAI/1.0 (+https://finai.app)",
+          "Accept": "application/json",
         },
         body: new URLSearchParams({
           url: args.fileUrl,
@@ -45,20 +50,33 @@ export const processReceiptOCR = action({
           OCREngine: "2",
         }).toString(),
       });
-      const ocrData = await ocrRes.json();
-      if (!ocrRes.ok || ocrData?.IsErroredOnProcessing) {
+
+      const rawBody = await ocrRes.text();
+      let ocrData: {
+        IsErroredOnProcessing?: boolean;
+        ParsedResults?: { ParsedText?: string }[];
+      } | null = null;
+      try {
+        ocrData = JSON.parse(rawBody);
+      } catch {
+        // not JSON at all — fall through, logged below via bodyPreview
+      }
+
+      if (!ocrRes.ok || !ocrData || ocrData.IsErroredOnProcessing) {
         console.error(
           "[processReceiptOCR] OCR.space request failed",
           JSON.stringify({
             httpStatus: ocrRes.status,
-            errorMessage: ocrData?.ErrorMessage,
-            errorDetails: ocrData?.ErrorDetails,
+            contentType: ocrRes.headers.get("content-type"),
+            // Full raw body, not cherry-picked fields — OCR.space's error
+            // shape varies (auth errors, quota errors, and processing
+            // errors all look different), so log everything and read it.
+            bodyPreview: rawBody.slice(0, 1000),
             fileUrl: args.fileUrl,
           })
         );
       }
-      rawOcrText =
-        ocrData?.ParsedResults?.[0]?.ParsedText ?? "";
+      rawOcrText = ocrData?.ParsedResults?.[0]?.ParsedText ?? "";
     } catch (err) {
       console.error("[processReceiptOCR] OCR.space fetch threw:", err);
       rawOcrText = "";
