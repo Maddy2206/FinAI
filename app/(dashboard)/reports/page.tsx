@@ -3,25 +3,23 @@
 import { useQuery, useAction, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Header } from "@/components/shared/Header";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { formatCurrency } from "@/lib/utils";
+import { formatCurrency, cn } from "@/lib/utils";
 import { format } from "date-fns";
-import { Sparkles, Mail, Trash2, ChevronDown, ChevronUp } from "lucide-react";
+import { Mail, Trash2, ChevronDown, ChevronUp, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { Id } from "@/convex/_generated/dataModel";
 
 export default function ReportsPage() {
-  const reports        = useQuery(api.reports.getWeeklyReports);
+  const reports = useQuery(api.reports.getWeeklyReports);
   const generateReport = useAction(api.reportsActions.generateWeeklyReport);
-  const deleteReport   = useMutation(api.reports.deleteReport);
-  const [generating, setGenerating]   = useState(false);
-  const [expanded, setExpanded]       = useState<string | null>(null);
-  const [deleting, setDeleting]       = useState<string | null>(null);
+  const deleteReport = useMutation(api.reports.deleteReport);
+  const [generating, setGenerating] = useState(false);
+  const [expanded, setExpanded] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState<string | null>(null);
 
   async function handleGenerate() {
     setGenerating(true);
@@ -34,7 +32,7 @@ export default function ReportsPage() {
         toast.warning("Report saved, but email failed — check Convex logs for details.");
       } else {
         toast.error("Failed to generate report");
-      };
+      }
     } finally {
       setGenerating(false);
     }
@@ -56,93 +54,101 @@ export default function ReportsPage() {
   return (
     <>
       <Header title="Weekly Reports" />
-      <div className="flex-1 overflow-y-auto p-6 space-y-6">
-
-        <div className="flex items-center justify-between">
+      <div className="flex-1 space-y-5 overflow-y-auto p-7">
+        <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <h2 className="text-sm font-semibold text-foreground">AI-Generated Weekly Reports</h2>
-            <p className="text-xs text-muted-foreground mt-0.5">
+            <p className="font-heading text-[17px] font-bold">AI-generated weekly reports</p>
+            <p className="mt-1 text-[13px] font-semibold text-ink/60">
               Automatically sent every Monday · PDF with full analytics attached
             </p>
           </div>
-          <Button onClick={handleGenerate} disabled={generating} size="sm">
-            <Sparkles className="h-4 w-4 mr-1.5" />
-            {generating ? "Generating..." : "Generate Now"}
+          <Button onClick={handleGenerate} disabled={generating}>
+            <Sparkles className="h-4 w-4" />
+            {generating ? "Generating…" : "Generate now"}
           </Button>
         </div>
 
         {reports === undefined ? (
           <div className="space-y-3">
-            {[...Array(3)].map((_, i) => <Skeleton key={i} className="h-28 rounded-xl" />)}
+            {[...Array(3)].map((_, i) => (
+              <Skeleton key={i} className="h-28 rounded-[18px]" />
+            ))}
           </div>
         ) : reports.length === 0 ? (
-          <div className="text-center py-16 text-muted-foreground">
-            <Sparkles className="h-10 w-10 mx-auto mb-3 opacity-30" />
-            <p className="font-medium">No reports yet</p>
-            <p className="text-sm mt-1">Click &quot;Generate Now&quot; to create your first weekly report</p>
+          <div className="py-16 text-center text-ink/50">
+            <Sparkles className="mx-auto mb-3 h-10 w-10 opacity-40" />
+            <p className="font-bold">No reports yet</p>
+            <p className="mt-1 text-sm">Click &quot;Generate now&quot; to create your first weekly report</p>
           </div>
         ) : (
-          <div className="space-y-3">
-            {reports.map((report) => (
-              <Card key={report._id} className="border-border/50">
-                <CardHeader className="pb-3">
-                  <div className="flex items-start justify-between gap-3">
+          <div className="space-y-3.5">
+            {reports.map((report) => {
+              const isExpanded = expanded === report._id;
+              return (
+                <div
+                  key={report._id}
+                  className={cn(
+                    "rounded-[18px] border-2 border-ink bg-white p-6",
+                    isExpanded && "shadow-[4px_4px_0_var(--marigold)]"
+                  )}
+                >
+                  <div className="flex flex-wrap items-start justify-between gap-3">
                     <div className="min-w-0">
-                      <CardTitle className="text-sm font-semibold">
+                      <p className="font-heading text-lg font-extrabold">
                         Week of {format(new Date(report.weekStart), "MMM d")}
                         {" – "}
                         {format(new Date(report.weekEnd), "MMM d, yyyy")}
-                      </CardTitle>
-                      <div className="flex items-center gap-2 mt-1 flex-wrap">
-                        <span className="text-xs text-muted-foreground">Total spent:</span>
-                        <span className="text-xs font-semibold text-destructive">
+                      </p>
+                      <p className="mt-1.5 text-[13px] font-semibold text-ink/60">
+                        Total spent:{" "}
+                        <span className="font-bold text-orange">
                           {formatCurrency(report.totalSpent)}
-                        </span>
-                        <span className="text-xs text-muted-foreground">· Top: {report.topCategory}</span>
-                      </div>
+                        </span>{" "}
+                        · Top category: {report.topCategory}
+                      </p>
                     </div>
 
-                    <div className="flex items-center gap-1.5 shrink-0">
+                    <div className="flex shrink-0 items-center gap-2.5">
                       {report.emailSentAt && (
-                        <Badge variant="secondary" className="gap-1 text-xs">
+                        <span className="flex items-center gap-1 rounded-full border-2 border-ink bg-success-tint px-3.5 py-1 text-xs font-bold text-success">
                           <Mail className="h-3 w-3" /> Sent
-                        </Badge>
+                        </span>
                       )}
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="h-7 px-2 text-xs gap-1"
-                        onClick={() => setExpanded(expanded === report._id ? null : report._id)}
+                      <button
+                        onClick={() => setExpanded(isExpanded ? null : report._id)}
+                        className="flex items-center gap-1 rounded-full border-2 border-ink px-3.5 py-1 text-xs font-bold transition-colors hover:bg-marigold"
                       >
-                        {expanded === report._id
-                          ? <><ChevronUp className="h-3.5 w-3.5" /> Hide</>
-                          : <><ChevronDown className="h-3.5 w-3.5" /> View</>
-                        }
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="h-7 w-7 p-0 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                        {isExpanded ? (
+                          <>
+                            <ChevronUp className="h-3.5 w-3.5" /> Hide
+                          </>
+                        ) : (
+                          <>
+                            <ChevronDown className="h-3.5 w-3.5" /> View
+                          </>
+                        )}
+                      </button>
+                      <button
                         disabled={deleting === report._id}
                         onClick={() => handleDelete(report._id)}
+                        className="text-ink/40 transition-colors hover:text-danger disabled:opacity-50"
+                        aria-label="Delete report"
                       >
                         <Trash2 className="h-3.5 w-3.5" />
-                      </Button>
+                      </button>
                     </div>
                   </div>
-                </CardHeader>
 
-                {expanded === report._id && (
-                  <CardContent className="pt-0">
-                    <div className="bg-muted/30 rounded-lg p-4 text-sm">
-                      <div className="prose prose-sm dark:prose-invert max-w-none">
+                  {isExpanded && (
+                    <div className="mt-4 rounded-[14px] border-2 border-ink/15 bg-cream p-5 text-sm leading-relaxed">
+                      <div className="prose prose-sm max-w-none [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
                         <ReactMarkdown>{report.reportContent}</ReactMarkdown>
                       </div>
                     </div>
-                  </CardContent>
-                )}
-              </Card>
-            ))}
+                  )}
+                </div>
+              );
+            })}
           </div>
         )}
       </div>

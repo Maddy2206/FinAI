@@ -3,9 +3,6 @@
 import { useState } from "react";
 import { useAction } from "convex/react";
 import { api } from "@/convex/_generated/api";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Sparkles } from "lucide-react";
 import { toast } from "sonner";
 
 interface NaturalLanguageInputProps {
@@ -37,20 +34,27 @@ export function NaturalLanguageInput({ onParsed }: NaturalLanguageInputProps) {
   }
 
   return (
-    <div className="flex gap-2">
-      <div className="relative flex-1">
-        <Sparkles className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-primary" />
-        <Input
-          className="pl-9"
-          placeholder="e.g., Spent ₹450 on pizza today"
+    <div className="rounded-[18px] border-2 border-ink bg-ink px-6 py-5 text-cream shadow-[4px_4px_0_var(--marigold)]">
+      <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.1em] text-marigold">
+        ✦ AI quick entry
+      </p>
+      <div className="flex gap-3">
+        <input
+          type="text"
+          placeholder='Try "Spent ₹450 on pizza today"'
           value={text}
           onChange={(e) => setText(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleParse()}
+          className="flex-1 rounded-xl border-2 border-cream/30 bg-cream/[0.08] px-4 py-3.5 text-sm text-cream placeholder:text-cream/40 outline-none focus:border-marigold"
         />
+        <button
+          onClick={handleParse}
+          disabled={loading || !text.trim()}
+          className="rounded-xl border-2 border-cream bg-marigold px-6 text-sm font-bold text-ink transition-colors hover:bg-orange hover:text-cream disabled:opacity-50"
+        >
+          {loading ? "Parsing…" : "Parse ✦"}
+        </button>
       </div>
-      <Button onClick={handleParse} disabled={loading || !text.trim()} size="sm">
-        {loading ? "Parsing..." : "Parse"}
-      </Button>
     </div>
   );
 }

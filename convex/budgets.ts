@@ -23,6 +23,7 @@ export const setBudget = mutation({
     category: categoryValidator,
     monthlyLimit: v.number(),
     month: v.string(),
+    icon: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const user = await getAuthUser(ctx);
@@ -33,7 +34,10 @@ export const setBudget = mutation({
       .first();
 
     if (existing) {
-      await ctx.db.patch(existing._id, { monthlyLimit: args.monthlyLimit });
+      await ctx.db.patch(existing._id, {
+        monthlyLimit: args.monthlyLimit,
+        ...(args.icon ? { icon: args.icon } : {}),
+      });
       return existing._id;
     }
 
@@ -42,6 +46,7 @@ export const setBudget = mutation({
       category: args.category,
       monthlyLimit: args.monthlyLimit,
       month: args.month,
+      icon: args.icon,
       createdAt: Date.now(),
     });
   },

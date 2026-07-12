@@ -1,9 +1,8 @@
 "use client";
 
-import { Card, CardContent } from "@/components/ui/card";
-import { formatCurrency } from "@/lib/utils";
-import { TrendingUp, TrendingDown, Wallet, Target, Award, AlertTriangle } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Wallet, CircleCheckBig, AlertTriangle, TrendingUp, TrendingDown } from "lucide-react";
+import { formatCurrency, cn } from "@/lib/utils";
+import { CATEGORY_ICONS, type ExpenseCategory } from "@/types";
 
 interface StatsCardsProps {
   totalSpent: number;
@@ -21,67 +20,82 @@ export function StatsCards({
 }: StatsCardsProps) {
   const saved = totalBudget > 0 ? totalBudget - totalSpent : 0;
   const isOverBudget = saved < 0;
+  const isUp = monthOverMonthChange >= 0;
+  const categoryEmoji = CATEGORY_ICONS[topCategory as ExpenseCategory] ?? "💰";
 
   const stats = [
     {
-      label: "Total Spent",
+      label: "Total spent",
       value: formatCurrency(totalSpent),
       icon: Wallet,
-      color: "text-primary",
-      bg: "bg-primary/10",
+      chipBg: "bg-marigold",
+      iconColor: "#1c1b2e",
+      valueColor: "text-ink",
       sub: "This month",
     },
     {
-      label: "Budget Left",
+      label: "Budget left",
       value: formatCurrency(Math.abs(saved)),
-      icon: isOverBudget ? AlertTriangle : Target,
-      color: isOverBudget ? "text-destructive" : "text-green-500",
-      bg: isOverBudget ? "bg-destructive/10" : "bg-green-500/10",
+      icon: isOverBudget ? AlertTriangle : CircleCheckBig,
+      chipBg: isOverBudget ? "bg-danger-tint" : "bg-success-tint",
+      iconColor: isOverBudget ? "#d92d20" : "#1e9e6a",
+      valueColor: isOverBudget ? "text-danger" : "text-success",
       sub: isOverBudget ? "Over budget" : "Remaining",
     },
     {
-      label: "Top Category",
+      label: "Top category",
       value: topCategory || "—",
-      icon: Award,
-      color: "text-yellow-500",
-      bg: "bg-yellow-500/10",
+      emoji: categoryEmoji,
+      valueColor: "text-ink",
       sub: "Highest spend",
     },
     {
-      label: "vs Last Month",
-      value: `${monthOverMonthChange >= 0 ? "+" : ""}${monthOverMonthChange.toFixed(1)}%`,
-      icon: monthOverMonthChange >= 0 ? TrendingUp : TrendingDown,
-      color: monthOverMonthChange > 10 ? "text-destructive" : monthOverMonthChange < 0 ? "text-green-500" : "text-muted-foreground",
-      bg: monthOverMonthChange > 10 ? "bg-destructive/10" : monthOverMonthChange < 0 ? "bg-green-500/10" : "bg-muted",
+      label: "vs last month",
+      value: `${isUp ? "+" : ""}${monthOverMonthChange.toFixed(1)}%`,
+      icon: isUp ? TrendingUp : TrendingDown,
+      chipBg: "bg-tint-food",
+      iconColor: "#f4650c",
+      valueColor: "text-orange",
       sub: "Month over month",
     },
   ];
 
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-      {stats.map((stat) => {
-        const Icon = stat.icon;
-        return (
-          <Card key={stat.label} className="border-border/50">
-            <CardContent className="p-5">
-              <div className="flex items-start justify-between">
-                <div>
-                  <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">
-                    {stat.label}
-                  </p>
-                  <p className={cn("text-2xl font-bold mt-1", stat.color)}>
-                    {stat.value}
-                  </p>
-                  <p className="text-xs text-muted-foreground mt-1">{stat.sub}</p>
+    <div className="grid grid-cols-2 gap-4.5 lg:grid-cols-4">
+      {stats.map((stat) => (
+        <div
+          key={stat.label}
+          className="rounded-[18px] border-2 border-ink bg-white p-5 shadow-[4px_4px_0_var(--ink)]"
+        >
+          <div className="flex items-start justify-between">
+            <p className="text-[11px] font-bold uppercase tracking-[0.08em] text-ink/55">
+              {stat.label}
+            </p>
+            {stat.emoji ? (
+              <span className="text-[17px]">{stat.emoji}</span>
+            ) : (
+              stat.icon && (
+                <div
+                  className={cn(
+                    "flex h-[30px] w-[30px] items-center justify-center rounded-[9px] border-2 border-ink",
+                    stat.chipBg
+                  )}
+                >
+                  <stat.icon
+                    style={{ height: 13, width: 13 }}
+                    stroke={stat.iconColor}
+                    strokeWidth={2.5}
+                  />
                 </div>
-                <div className={cn("p-2 rounded-lg", stat.bg)}>
-                  <Icon className={cn("h-4 w-4", stat.color)} />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        );
-      })}
+              )
+            )}
+          </div>
+          <p className={cn("mt-2 font-heading text-[28px] font-extrabold tracking-[-0.01em]", stat.valueColor)}>
+            {stat.value}
+          </p>
+          <p className="mt-0.5 text-xs font-semibold text-ink/55">{stat.sub}</p>
+        </div>
+      ))}
     </div>
   );
 }

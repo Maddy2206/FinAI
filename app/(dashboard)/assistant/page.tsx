@@ -3,12 +3,11 @@
 import { useState, useRef, useEffect } from "react";
 import { useQuery, useAction, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
+import { useUser } from "@clerk/nextjs";
 import { Header } from "@/components/shared/Header";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import ReactMarkdown from "react-markdown";
-import { Send, Sparkles, Bot, User, Trash2 } from "lucide-react";
+import { Send, Bot, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
@@ -26,13 +25,24 @@ const SUGGESTED_QUERIES = [
   "Am I on track with my budgets?",
 ];
 
+function initialsFor(name: string | null | undefined) {
+  if (!name) return "You";
+  const parts = name.trim().split(/\s+/);
+  return parts
+    .slice(0, 2)
+    .map((p) => p[0]?.toUpperCase())
+    .join("");
+}
+
 export default function AssistantPage() {
   const messages = useQuery(api.assistant.getChatHistory);
   const sendMessage = useAction(api.assistantActions.sendMessage);
   const clearHistory = useMutation(api.assistant.clearChatHistory);
+  const { user } = useUser();
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const initials = initialsFor(user?.fullName);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -56,28 +66,32 @@ export default function AssistantPage() {
   return (
     <>
       <Header title="AI Assistant" />
-      <div className="flex-1 flex flex-col min-h-0">
+      <div className="flex min-h-0 flex-1 flex-col">
         {/* Messages area */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-4">
+        <div className="flex-1 space-y-4.5 overflow-y-auto p-7">
           {messages === undefined ? (
             <div className="space-y-3">
-              {[...Array(3)].map((_, i) => <Skeleton key={i} className="h-16 rounded-xl" />)}
+              {[...Array(3)].map((_, i) => (
+                <Skeleton key={i} className="h-16 rounded-2xl" />
+              ))}
             </div>
           ) : messages.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-full gap-6 py-12">
-              <div className="h-16 w-16 rounded-2xl bg-primary/10 flex items-center justify-center">
-                <Bot className="h-8 w-8 text-primary" />
+            <div className="flex h-full flex-col items-center justify-center gap-6 py-12">
+              <div className="flex h-16 w-16 items-center justify-center rounded-2xl border-2 border-ink bg-ink shadow-[3px_3px_0_var(--marigold)]">
+                <Bot style={{ height: 28, width: 28 }} stroke="#ffb02e" strokeWidth={2} />
               </div>
               <div className="text-center">
-                <p className="text-lg font-semibold text-foreground">Your AI Financial Advisor</p>
-                <p className="text-sm text-muted-foreground mt-1">Ask me anything about your spending, savings, or budgets.</p>
+                <p className="font-heading text-lg font-bold">Your AI Financial Advisor</p>
+                <p className="mt-1 text-sm text-ink/55">
+                  Ask me anything about your spending, savings, or budgets.
+                </p>
               </div>
-              <div className="flex flex-wrap gap-2 justify-center max-w-md">
+              <div className="flex max-w-md flex-wrap justify-center gap-2.5">
                 {SUGGESTED_QUERIES.map((q) => (
                   <button
                     key={q}
                     onClick={() => handleSend(q)}
-                    className="text-xs px-3 py-1.5 bg-card border border-border rounded-full text-foreground hover:border-primary hover:text-primary transition-colors"
+                    className="rounded-full border-2 border-ink bg-white px-3.5 py-1.5 text-xs font-bold transition-colors hover:bg-marigold"
                   >
                     {q}
                   </button>
@@ -89,26 +103,30 @@ export default function AssistantPage() {
               {(messages as ChatMessage[]).map((msg) => (
                 <div
                   key={msg._id}
-                  className={cn("flex gap-3 max-w-3xl", msg.role === "user" ? "ml-auto flex-row-reverse" : "")}
+                  className={cn(
+                    "flex max-w-[720px] gap-3",
+                    msg.role === "user" && "ml-auto flex-row-reverse"
+                  )}
                 >
-                  <div className={cn(
-                    "h-8 w-8 rounded-full flex items-center justify-center shrink-0 mt-0.5",
-                    msg.role === "user" ? "bg-primary" : "bg-card border border-border"
-                  )}>
-                    {msg.role === "user" ? (
-                      <User className="h-4 w-4 text-primary-foreground" />
-                    ) : (
-                      <Bot className="h-4 w-4 text-foreground" />
+                  {msg.role === "assistant" ? (
+                    <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border-2 border-ink bg-ink shadow-[2px_2px_0_var(--marigold)]">
+                      <Bot style={{ height: 16, width: 16 }} stroke="#ffb02e" strokeWidth={2} />
+                    </div>
+                  ) : (
+                    <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 border-ink bg-marigold font-heading text-xs font-extrabold text-ink">
+                      {initials}
+                    </div>
+                  )}
+                  <div
+                    className={cn(
+                      "rounded-[18px] border-2 border-ink px-4.5 py-3.5 text-sm leading-relaxed",
+                      msg.role === "user"
+                        ? "rounded-tr-[4px] bg-orange text-cream shadow-[3px_3px_0_var(--ink)]"
+                        : "rounded-tl-[4px] bg-white"
                     )}
-                  </div>
-                  <div className={cn(
-                    "rounded-2xl px-4 py-3 text-sm max-w-[80%]",
-                    msg.role === "user"
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-card border border-border text-foreground"
-                  )}>
+                  >
                     {msg.role === "assistant" ? (
-                      <div className="prose prose-sm dark:prose-invert max-w-none [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
+                      <div className="prose prose-sm max-w-none [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
                         <ReactMarkdown>{msg.content}</ReactMarkdown>
                       </div>
                     ) : (
@@ -118,15 +136,15 @@ export default function AssistantPage() {
                 </div>
               ))}
               {loading && (
-                <div className="flex gap-3">
-                  <div className="h-8 w-8 rounded-full bg-card border border-border flex items-center justify-center">
-                    <Bot className="h-4 w-4 text-foreground" />
+                <div className="flex max-w-[720px] gap-3">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border-2 border-ink bg-ink shadow-[2px_2px_0_var(--marigold)]">
+                    <Bot style={{ height: 16, width: 16 }} stroke="#ffb02e" strokeWidth={2} />
                   </div>
-                  <div className="bg-card border border-border rounded-2xl px-4 py-3">
-                    <div className="flex gap-1.5 items-center h-5">
-                      <div className="h-1.5 w-1.5 bg-muted-foreground rounded-full animate-bounce [animation-delay:0ms]" />
-                      <div className="h-1.5 w-1.5 bg-muted-foreground rounded-full animate-bounce [animation-delay:150ms]" />
-                      <div className="h-1.5 w-1.5 bg-muted-foreground rounded-full animate-bounce [animation-delay:300ms]" />
+                  <div className="rounded-[18px] rounded-tl-[4px] border-2 border-ink bg-white px-4.5 py-3.5">
+                    <div className="flex h-5 items-center gap-1.5">
+                      <div className="h-1.5 w-1.5 animate-bounce rounded-full bg-ink/40 [animation-delay:0ms]" />
+                      <div className="h-1.5 w-1.5 animate-bounce rounded-full bg-ink/40 [animation-delay:150ms]" />
+                      <div className="h-1.5 w-1.5 animate-bounce rounded-full bg-ink/40 [animation-delay:300ms]" />
                     </div>
                   </div>
                 </div>
@@ -138,12 +156,12 @@ export default function AssistantPage() {
 
         {/* Suggested queries (when has messages) */}
         {messages && messages.length > 0 && (
-          <div className="px-4 pb-2 flex gap-2 overflow-x-auto scrollbar-none">
+          <div className="scrollbar-none flex gap-2.5 overflow-x-auto px-7 pb-3">
             {SUGGESTED_QUERIES.slice(0, 3).map((q) => (
               <button
                 key={q}
                 onClick={() => handleSend(q)}
-                className="text-xs px-3 py-1.5 bg-card border border-border rounded-full text-muted-foreground hover:text-foreground hover:border-primary whitespace-nowrap transition-colors flex-shrink-0"
+                className="shrink-0 whitespace-nowrap rounded-full border-2 border-ink bg-white px-4 py-1.5 text-xs font-bold transition-colors hover:bg-marigold"
               >
                 {q}
               </button>
@@ -152,33 +170,33 @@ export default function AssistantPage() {
         )}
 
         {/* Input area */}
-        <div className="border-t border-border p-4">
-          <div className="flex gap-2 max-w-3xl mx-auto">
-            {messages && messages.length > 0 && (
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => clearHistory()}
-                className="shrink-0 text-muted-foreground hover:text-destructive"
-              >
-                <Trash2 className="h-4 w-4" />
-              </Button>
-            )}
-            <div className="flex-1 relative">
-              <Sparkles className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                className="pl-9 pr-4"
-                placeholder="Ask about your finances..."
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && handleSend()}
-                disabled={loading}
-              />
-            </div>
-            <Button onClick={() => handleSend()} disabled={loading || !input.trim()} size="icon">
-              <Send className="h-4 w-4" />
-            </Button>
-          </div>
+        <div className="flex items-center gap-3 border-t-2 border-ink bg-cream px-7 py-4">
+          {messages && messages.length > 0 && (
+            <button
+              onClick={() => clearHistory()}
+              className="shrink-0 text-ink/50 transition-colors hover:text-danger"
+              aria-label="Clear chat history"
+            >
+              <Trash2 className="h-4 w-4" />
+            </button>
+          )}
+          <input
+            type="text"
+            placeholder="Ask about your finances… ✦"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && handleSend()}
+            disabled={loading}
+            className="h-12 flex-1 rounded-full border-2 border-ink bg-white px-5.5 text-sm text-ink outline-none placeholder:text-ink/45 focus:shadow-[3px_3px_0_var(--marigold)] disabled:opacity-60"
+          />
+          <button
+            onClick={() => handleSend()}
+            disabled={loading || !input.trim()}
+            aria-label="Send message"
+            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border-2 border-ink bg-orange shadow-[3px_3px_0_var(--ink)] transition-transform hover:-translate-x-0.5 hover:-translate-y-0.5 disabled:opacity-50"
+          >
+            <Send style={{ height: 18, width: 18 }} stroke="#faf4e8" strokeWidth={2.5} />
+          </button>
         </div>
       </div>
     </>

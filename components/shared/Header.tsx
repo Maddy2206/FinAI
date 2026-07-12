@@ -1,11 +1,10 @@
 "use client";
 
+import { useState } from "react";
 import { Menu } from "lucide-react";
-import { ThemeToggle } from "./ThemeToggle";
-import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Sidebar } from "./Sidebar";
-import { useState } from "react";
+import { formatMonth, getCurrentMonth } from "@/lib/utils";
 
 interface HeaderProps {
   title: string;
@@ -15,21 +14,30 @@ export function Header({ title }: HeaderProps) {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 h-16 border-b border-border bg-background/80 backdrop-blur-sm flex items-center px-4 gap-4">
-      {/* Mobile menu */}
-      <Sheet open={open} onOpenChange={setOpen}>
-        <SheetTrigger asChild>
-          <Button variant="ghost" size="icon" className="lg:hidden">
-            <Menu className="h-5 w-5" />
-          </Button>
-        </SheetTrigger>
-        <SheetContent side="left" className="p-0 w-64">
-          <Sidebar onClose={() => setOpen(false)} />
-        </SheetContent>
-      </Sheet>
+    <header className="flex h-[66px] shrink-0 items-center justify-between border-b-2 border-ink bg-cream px-7">
+      <div className="flex items-center gap-3">
+        <Sheet open={open} onOpenChange={setOpen}>
+          <SheetTrigger asChild>
+            <button
+              className="flex h-9 w-9 items-center justify-center rounded-full border-2 border-ink bg-white lg:hidden"
+              aria-label="Open menu"
+            >
+              <Menu className="h-4 w-4" />
+            </button>
+          </SheetTrigger>
+          <SheetContent side="left" className="w-[244px] p-0">
+            <Sidebar onClose={() => setOpen(false)} />
+          </SheetContent>
+        </Sheet>
 
-      <h1 className="text-lg font-semibold text-foreground flex-1">{title}</h1>
-      <ThemeToggle />
+        <h1 className="font-heading text-[22px] font-extrabold tracking-[-0.01em]">
+          {title}
+        </h1>
+      </div>
+
+      <span className="rounded-full border-2 border-ink bg-white px-4 py-1.5 text-[13px] font-bold shadow-[2px_2px_0_var(--ink)]">
+        {formatMonth(getCurrentMonth())}
+      </span>
     </header>
   );
 }

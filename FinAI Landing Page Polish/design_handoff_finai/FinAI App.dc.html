@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FinAI — Dashboard</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Public+Sans:wght@400;500;600;700&display=swap');
+body { margin: 0; background: #faf4e8; }
+a { color: #f4650c; text-decoration: none; }
+a:hover { color: #1c1b2e; }
+</style>
+</helmet>
+
+<div data-screen-label="App" style="display: flex; height: 100vh; background: #faf4e8; color: #1c1b2e; font-family: 'Public Sans', sans-serif; overflow: hidden;">
+
+  <!-- ══ SIDEBAR ══ -->
+  <div style="width: 244px; flex-shrink: 0; background: #1c1b2e; color: #faf4e8; display: flex; flex-direction: column;">
+    <div style="display: flex; align-items: center; gap: 10px; padding: 20px 22px; border-bottom: 2px solid rgba(250,244,232,0.12);">
+      <div style="height: 32px; width: 32px; border-radius: 10px; background: #f4650c; border: 2px solid #faf4e8; display: flex; align-items: center; justify-content: center; box-shadow: 2px 2px 0 rgba(250,244,232,0.4);">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#faf4e8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg>
+      </div>
+      <span style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 19px;">Fin<span style="color: #ffb02e;">AI</span></span>
+    </div>
+
+    <nav style="flex: 1; padding: 14px 12px; display: flex; flex-direction: column; gap: 4px; overflow-y: auto;">
+      <div onClick="{{ goDashboard }}" style="display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 12px; font-size: 14px; font-weight: 700; cursor: pointer; background: {{ navBgDashboard }}; color: {{ navFgDashboard }};" style-hover="background: rgba(250,244,232,0.08);">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"></rect><rect width="7" height="5" x="14" y="3" rx="1"></rect><rect width="7" height="9" x="14" y="12" rx="1"></rect><rect width="7" height="5" x="3" y="16" rx="1"></rect></svg>
+        Dashboard
+      </div>
+      <div onClick="{{ goExpenses }}" style="display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 12px; font-size: 14px; font-weight: 700; cursor: pointer; background: {{ navBgExpenses }}; color: {{ navFgExpenses }};" style-hover="background: rgba(250,244,232,0.08);">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"></path><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"></path></svg>
+        Expenses
+      </div>
+      <div onClick="{{ goBudgets }}" style="display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 12px; font-size: 14px; font-weight: 700; cursor: pointer; background: {{ navBgBudgets }}; color: {{ navFgBudgets }};" style-hover="background: rgba(250,244,232,0.08);">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 5c-1.5 0-2.8 1.4-3 2-3.5-1.5-11-.3-11 5 0 1.8 0 3 2 4.5V20h4v-2h3v2h4v-4c1-.5 1.7-1 2-2h2v-4h-2c0-1-.5-1.5-1-2V5z"></path><path d="M2 9v1c0 1.1.9 2 2 2h1"></path><path d="M16 11h.01"></path></svg>
+        Budgets
+      </div>
+      <div onClick="{{ goReceipts }}" style="display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 12px; font-size: 14px; font-weight: 700; cursor: pointer; background: {{ navBgReceipts }}; color: {{ navFgReceipts }};" style-hover="background: rgba(250,244,232,0.08);">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"></path><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><path d="M12 17.5v-11"></path></svg>
+        Receipts
+      </div>
+      <div onClick="{{ goAnalytics }}" style="display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 12px; font-size: 14px; font-weight: 700; cursor: pointer; background: {{ navBgAnalytics }}; color: {{ navFgAnalytics }};" style-hover="background: rgba(250,244,232,0.08);">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="M18 17V9"></path><path d="M13 17V5"></path><path d="M8 17v-3"></path></svg>
+        Analytics
+      </div>
+      <div onClick="{{ goAssistant }}" style="display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 12px; font-size: 14px; font-weight: 700; cursor: pointer; background: {{ navBgAssistant }}; color: {{ navFgAssistant }};" style-hover="background: rgba(250,244,232,0.08);">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"></path><rect width="16" height="12" x="4" y="8" rx="2"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M15 13v2"></path><path d="M9 13v2"></path></svg>
+        AI Assistant
+      </div>
+      <div onClick="{{ goReports }}" style="display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 12px; font-size: 14px; font-weight: 700; cursor: pointer; background: {{ navBgReports }}; color: {{ navFgReports }};" style-hover="background: rgba(250,244,232,0.08);">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path><path d="M14 2v4a2 2 0 0 0 2 2h4"></path><path d="M10 9H8"></path><path d="M16 13H8"></path><path d="M16 17H8"></path></svg>
+        Reports
+      </div>
+    </nav>
+
+    <div style="padding: 16px 22px; border-top: 2px solid rgba(250,244,232,0.12); display: flex; align-items: center; gap: 12px;">
+      <div style="height: 34px; width: 34px; border-radius: 50%; background: #ffb02e; border: 2px solid #faf4e8; display: flex; align-items: center; justify-content: center; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 13px; color: #1c1b2e;">PS</div>
+      <div>
+        <p style="font-size: 13px; font-weight: 700; margin: 0;">Priya Sharma</p>
+        <p style="font-size: 11px; color: rgba(250,244,232,0.5); margin: 0;">Free plan</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ MAIN ══ -->
+  <div style="flex: 1; min-width: 0; display: flex; flex-direction: column;">
+    <!-- header -->
+    <div style="height: 66px; flex-shrink: 0; border-bottom: 2px solid #1c1b2e; display: flex; align-items: center; justify-content: space-between; padding: 0 28px; background: #faf4e8;">
+      <h1 style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 22px; margin: 0; letter-spacing: -0.01em;">{{ pageTitle }}</h1>
+      <span style="font-size: 13px; font-weight: 700; background: #ffffff; border: 2px solid #1c1b2e; border-radius: 999px; padding: 6px 16px; box-shadow: 2px 2px 0 #1c1b2e;">May 2026</span>
+    </div>
+
+    <!-- ════ DASHBOARD ════ -->
+    <sc-if value="{{ isDashboard }}" hint-placeholder-val="{{ true }}">
+      <div data-screen-label="Dashboard" style="flex: 1; overflow-y: auto; padding: 28px; display: flex; flex-direction: column; gap: 22px;">
+
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px;">
+          <div style="background: #ffffff; border: 2px solid #1c1b2e; border-radius: 18px; padding: 20px; box-shadow: 4px 4px 0 #1c1b2e;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+              <p style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(28,27,46,0.55); margin: 0;">Total spent</p>
+              <div style="height: 30px; width: 30px; border-radius: 9px; background: #ffb02e; border: 2px solid #1c1b2e; display: flex; align-items: center; justify-content: center;">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#1c1b2e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"></path><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"></path></svg>
+              </div>
+            </div>
+            <p style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 28px; margin: 8px 0 2px 0; letter-spacing: -0.01em;">₹24,850</p>
+            <p style="font-size: 12px; font-weight: 600; color: rgba(28,27,46,0.55); margin: 0;">This month</p>
+          </div>
+          <div style="background: #ffffff; border: 2px solid #1c1b2e; border-radius: 18px; padding: 20px; box-shadow: 4px 4px 0 #1c1b2e;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+              <p style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(28,27,46,0.55); margin: 0;">Budget left</p>
+              <div style="height: 30px; width: 30px; border-radius: 9px; background: #d9f2e5; border: 2px solid #1c1b2e; display: flex; align-items: center; justify-content: center;">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#1e9e6a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg>
+              </div>
+            </div>
+            <p style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 28px; color: #1e9e6a; margin: 8px 0 2px 0; letter-spacing: -0.01em;">₹10,150</p>
+            <p style="font-size: 12px; font-weight: 600; color: rgba(28,27,46,0.55); margin: 0;">Remaining</p>
+          </div>
+          <div style="background: #ffffff; border: 2px solid #1c1b2e; border-radius: 18px; padding: 20px; box-shadow: 4px 4px 0 #1c1b2e;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+              <p style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(28,27,46,0.55); margin: 0;">Top category</p>
+              <span style="font-size: 17px;">🍕</span>
+            </div>
+            <p style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 28px; margin: 8px 0 2px 0; letter-spacing: -0.01em;">Food</p>
+            <p style="font-size: 12px; font-weight: 600; color: rgba(28,27,46,0.55); margin: 0;">Highest spend</p>
+          </div>
+          <div style="background: #ffffff; border: 2px solid #1c1b2e; border-radius: 18px; padding: 20px; box-shadow: 4px 4px 0 #1c1b2e;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+              <p style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(28,27,46,0.55); margin: 0;">vs last month</p>
+              <div style="height: 30px; width: 30px; border-radius: 9px; background: #fde3d3; border: 2px solid #1c1b2e; display: flex; align-items: center; justify-content: center;">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#f4650c" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg>
+              </div>
+            </div>
+            <p style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 28px; color: #f4650c; margin: 8px 0 2px 0; letter-spacing: -0.01em;">+12.4%</p>
+            <p style="font-size: 12px; font-weight: 600; color: rgba(28,27,46,0.55); margin: 0;">Month over month</p>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 18px;">
+          <div style="background: #ffffff; border: 2px solid #1c1b2e; border-radius: 18px; padding: 24px;">
+            <p style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 16px; margin: 0 0 20px 0;">Monthly trend</p>
+            <div style="display: flex; align-items: flex-end; gap: 10px; height: 150px;">
+              <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; height: 100%; justify-content: flex-end;"><div style="width: 100%; height: 42%; background: #e8e0d0; border-radius: 6px 6px 0 0; border: 2px solid #1c1b2e; border-bottom: none; box-sizing: border-box;"></div><span style="font-size: 10px; font-weight: 700; color: rgba(28,27,46,0.5);">Jun</span></div>
+              <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; height: 100%; justify-content: flex-end;"><div style="width: 100%; height: 55%; background: #e8e0d0; border-radius: 6px 6px 0 0; border: 2px solid #1c1b2e; border-bottom: none; box-sizing: border-box;"></div><span style="font-size: 10px; font-weight: 700; color: rgba(28,27,46,0.5);">Jul</span></div>
+              <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; height: 100%; justify-content: flex-end;"><div style="width: 100%; height: 38%; background: #e8e0d0; border-radius: 6px 6px 0 0; border: 2px solid #1c1b2e; border-bottom: none; box-sizing: border-box;"></div><span style="font-size: 10px; font-weight: 700; color: rgba(28,27,46,0.5);">Aug</span></div>
+              <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; height: 100%; justify-content: flex-end;"><div style="width: 100%; height: 64%; background: #e8e0d0; border-radius: 6px 6px 0 0; border: 2px solid #1c1b2e; border-bottom: none; box-sizing: border-box;"></div><span style="font-size: 10px; font-weight: 700; color: rgba(28,27,46,0.5);">Sep</span></div>
+              <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; height: 100%; justify-content: flex-end;"><div style="width: 100%; height: 48%; background: #e8e0d0; border-radius: 6px 6px 0 0; border: 2px solid #1c1b2e; border-bottom: none; box-sizing: border-box;"></div><span style="font-size: 10px; font-weight: 700; color: rgba(28,27,46,0.5);">Oct</span></div>
+              <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; height: 100%; justify-content: flex-end;"><div style="width: 100%; height: 58%; background: #e8e0d0; border-radius: 6px 6px 0 0; border: 2px solid #1c1b2e; border-bottom: none; box-sizing: border-box;"></div><span style="font-size: 10px; font-weight: 700; color: rgba(28,27,46,0.5);">Nov</span></div>
+              <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; height: 100%; justify-content: flex-end;"><div style="width: 100%; height: 70%; background: #e8e0d0; border-radius: 6px 6px 0 0; border: 2px solid #1c1b2e; border-bottom: none; box-sizing: border-box;"></div><span style="font-size: 10px; font-weight: 700; color: rgba(28,27,46,0.5);">Dec</span></div>
+              <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; height: 100%; justify-content: flex-end;"><div style="width: 100%; height: 52%; background: #e8e0d0; border-radius: 6px 6px 0 0; border: 2px solid #1c1b2e; border-bottom: none; box-sizing: border-box;"></div><span style="font-size: 10px; font-weight: 700; color: rgba(28,27,46,0.5);">Jan</span></div>
+              <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; height: 100%; justify-content: flex-end;"><div style="width: 100%; height: 60%; background: #e8e0d0; border-radius: 6px 6px 0 0; border: 2px solid #1c1b2e; border-bottom: none; box-sizing: border-box;"></div><span style="font-size: 10px; font-weight: 700; color: rgba(28,27,46,0.5);">Feb</span></div>
+              <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; height: 100%; justify-content: flex-end;"><div style="width: 100%; height: 46%; background: #e8e0d0; border-radius: 6px 6px 0 0; border: 2px solid #1c1b2e; border-bottom: none; box-sizing: border-box;"></div><span style="font-size: 10px; font-weight: 700; color: rgba(28,27,46,0.5);">Mar</span></div>
+              <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; height: 100%; justify-content: flex-end;"><div style="width: 100%; height: 66%; background: #e8e0d0; border-radius: 6px 6px 0 0; border: 2px solid #1c1b2e; border-bottom: none; box-sizing: border-box;"></div><span style="font-size: 10px; font-weight: 700; color: rgba(28,27,46,0.5);">Apr</span></div>
+              <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; height: 100%; justify-content: flex-end;"><div style="width: 100%; height: 88%; background: #f4650c; border-radius: 6px 6px 0 0; border: 2px solid #1c1b2e; border-bottom: none; box-sizing: border-box;"></div><span style="font-size: 10px; font-weight: 800;">May</span></div>
+            </div>
+          </div>
+
+          <div style="background: #ffffff; border: 2px solid #1c1b2e; border-radius: 18px; padding: 24px; box-shadow: 4px 4px 0 #ffb02e; display: flex; flex-direction: column; align-items: center;">
+            <p style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 16px; margin: 0 0 16px 0; align-self: flex-start;">Financial health</p>
+            <div style="position: relative; height: 130px; width: 130px; border-radius: 50%; background: conic-gradient(#1e9e6a 0% 87%, #e8e0d0 87% 100%); display: flex; align-items: center; justify-content: center;">
+              <div style="height: 96px; width: 96px; border-radius: 50%; background: #ffffff; border: 2px solid #1c1b2e; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <span style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 32px; line-height: 1;">87</span>
+                <span style="font-size: 11px; font-weight: 600; color: rgba(28,27,46,0.5);">/ 100</span>
+              </div>
+            </div>
+            <span style="margin-top: 16px; font-size: 13px; font-weight: 700; color: #1e9e6a; background: #d9f2e5; border: 2px solid #1c1b2e; border-radius: 999px; padding: 5px 16px;">Excellent ✓</span>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 18px;">
+          <div style="background: #ffffff; border: 2px solid #1c1b2e; border-radius: 18px; padding: 24px;">
+            <p style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 16px; margin: 0 0 20px 0;">Spending by category</p>
+            <div style="display: flex; align-items: center; gap: 28px;">
+              <div style="position: relative; height: 140px; width: 140px; flex-shrink: 0; border-radius: 50%; background: conic-gradient(#f4650c 0% 31%, #ffb02e 31% 53%, #1c1b2e 53% 70%, #1e9e6a 70% 82%, #8d86c9 82% 92%, #e8e0d0 92% 100%);">
+              <div style="position: absolute; inset: 34px; border-radius: 50%; background: #ffffff; border: 2px solid #1c1b2e;"></div>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 9px; font-size: 13px; font-weight: 600; flex: 1;">
+                <div style="display: flex; align-items: center; gap: 8px;"><span style="height: 12px; width: 12px; border-radius: 4px; background: #f4650c; border: 2px solid #1c1b2e;"></span>Food <span style="margin-left: auto;">₹7,690</span></div>
+                <div style="display: flex; align-items: center; gap: 8px;"><span style="height: 12px; width: 12px; border-radius: 4px; background: #ffb02e; border: 2px solid #1c1b2e;"></span>Shopping <span style="margin-left: auto;">₹5,480</span></div>
+                <div style="display: flex; align-items: center; gap: 8px;"><span style="height: 12px; width: 12px; border-radius: 4px; background: #1c1b2e; border: 2px solid #1c1b2e;"></span>Utilities <span style="margin-left: auto;">₹4,210</span></div>
+                <div style="display: flex; align-items: center; gap: 8px;"><span style="height: 12px; width: 12px; border-radius: 4px; background: #1e9e6a; border: 2px solid #1c1b2e;"></span>Transport <span style="margin-left: auto;">₹2,980</span></div>
+                <div style="display: flex; align-items: center; gap: 8px;"><span style="height: 12px; width: 12px; border-radius: 4px; background: #8d86c9; border: 2px solid #1c1b2e;"></span>Subscriptions <span style="margin-left: auto;">₹2,490</span></div>
+                <div style="display: flex; align-items: center; gap: 8px;"><span style="height: 12px; width: 12px; border-radius: 4px; background: #e8e0d0; border: 2px solid #1c1b2e;"></span>Other <span style="margin-left: auto;">₹2,000</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div style="background: #ffffff; border: 2px solid #1c1b2e; border-radius: 18px; padding: 24px;">
+            <p style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 16px; margin: 0 0 20px 0;">Budget progress</p>
+            <div style="display: flex; flex-direction: column; gap: 16px;">
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; margin-bottom: 6px;"><span>🍕 Food</span><span style="color: #d97706;">78%</span></div>
+                <div style="height: 12px; border: 2px solid #1c1b2e; border-radius: 999px; overflow: hidden; background: #faf4e8;"><div style="width: 78%; height: 100%; background: repeating-linear-gradient(45deg, #f4650c, #f4650c 7px, #ffb02e 7px, #ffb02e 14px);"></div></div>
+              </div>
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; margin-bottom: 6px;"><span>⚡ Utilities</span><span style="color: #d92d20;">97%</span></div>
+                <div style="height: 12px; border: 2px solid #1c1b2e; border-radius: 999px; overflow: hidden; background: #faf4e8;"><div style="width: 97%; height: 100%; background: repeating-linear-gradient(45deg, #d92d20, #d92d20 7px, #f4650c 7px, #f4650c 14px);"></div></div>
+              </div>
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; margin-bottom: 6px;"><span>🛒 Shopping</span><span style="color: #1e9e6a;">57%</span></div>
+                <div style="height: 12px; border: 2px solid #1c1b2e; border-radius: 999px; overflow: hidden; background: #faf4e8;"><div style="width: 57%; height: 100%; background: repeating-linear-gradient(45deg, #1e9e6a, #1e9e6a 7px, #6cc9a1 7px, #6cc9a1 14px);"></div></div>
+              </div>
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; margin-bottom: 6px;"><span>🚗 Transport</span><span style="color: #1e9e6a;">47%</span></div>
+                <div style="height: 12px; border: 2px solid #1c1b2e; border-radius: 999px; overflow: hidden; background: #faf4e8;"><div style="width: 47%; height: 100%; background: repeating-linear-gradient(45deg, #1e9e6a, #1e9e6a 7px, #6cc9a1 7px, #6cc9a1 14px);"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="background: #ffffff; border: 2px solid #1c1b2e; border-radius: 18px; padding: 24px;">
+          <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 16px;">
+            <p style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 16px; margin: 0;">Recent transactions</p>
+            <a href="#" onClick="{{ goExpenses }}" style="font-size: 13px; font-weight: 700;">View all →</a>
+          </div>
+          <div style="display: flex; flex-direction: column;">
+            <div style="display: flex; align-items: center; gap: 14px; padding: 12px 0; border-bottom: 2px solid rgba(28,27,46,0.08);">
+              <div style="height: 38px; width: 38px; border-radius: 12px; background: #fde3d3; border: 2px solid #1c1b2e; display: flex; align-items: center; justify-content: center; font-size: 16px;">🍕</div>
+              <div style="flex: 1;"><p style="font-size: 14px; font-weight: 700; margin: 0;">Domino's Pizza</p><p style="font-size: 12px; color: rgba(28,27,46,0.55); margin: 0;">Food · May 10</p></div>
+              <span style="font-size: 14px; font-weight: 700;">−₹450</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 14px; padding: 12px 0; border-bottom: 2px solid rgba(28,27,46,0.08);">
+              <div style="height: 38px; width: 38px; border-radius: 12px; background: #ffedc7; border: 2px solid #1c1b2e; display: flex; align-items: center; justify-content: center; font-size: 16px;">🛒</div>
+              <div style="flex: 1;"><p style="font-size: 14px; font-weight: 700; margin: 0;">BigBasket</p><p style="font-size: 12px; color: rgba(28,27,46,0.55); margin: 0;">Shopping · May 9</p></div>
+              <span style="font-size: 14px; font-weight: 700;">−₹1,240</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 14px; padding: 12px 0; border-bottom: 2px solid rgba(28,27,46,0.08);">
+              <div style="height: 38px; width: 38px; border-radius: 12px; background: #e8e0d0; border: 2px solid #1c1b2e; display: flex; align-items: center; justify-content: center; font-size: 16px;">⚡</div>
+              <div style="flex: 1;"><p style="font-size: 14px; font-weight: 700; margin: 0;">Electricity Bill</p><p style="font-size: 12px; color: rgba(28,27,46,0.55); margin: 0;">Utilities · May 8</p></div>
+              <span style="font-size: 14px; font-weight: 700;">−₹890</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 14px; padding: 12px 0; border-bottom: 2px solid rgba(28,27,46,0.08);">
+              <div style="height: 38px; width: 38px; border-radius: 12px; background: #d9f2e5; border: 2px solid #1c1b2e; display: flex; align-items: center; justify-content: center; font-size: 16px;">🚗</div>
+              <div style="flex: 1;"><p style="font-size: 14px; font-weight: 700; margin: 0;">Uber</p><p style="font-size: 12px; color: rgba(28,27,46,0.55); margin: 0;">Transport · May 8</p></div>
+              <span style="font-size: 14px; font-weight: 700;">−₹220</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 14px; padding: 12px 0;">
+              <div style="height: 38px; width: 38px; border-radius: 12px; background: #e3e0f2; border: 2px solid #1c1b2e; display: flex; align-items: center; justify-content: center; font-size: 16px;">📺</div>
+              <div style="flex: 1;"><p style="font-size: 14px; font-weight: 700; margin: 0;">Netflix</p><p style="font-size: 12px; color: rgba(28,27,46,0.55); margin: 0;">Subscriptions · May 7</p></div>
+              <span style="font-size: 14px; font-weight: 700;">−₹649</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- ════ EXPENSES ════ -->
+    <sc-if value="{{ isExpenses }}" hint-placeholder-val="{{ false }}">
+      <div data-screen-label="Expenses" style="flex: 1; overflow-y: auto; padding: 28px; display: flex; flex-direction: column; gap: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 14px; font-weight: 700; background: #ffffff; border: 2px solid #1c1b2e; border-radius: 12px; padding: 10px 16px;">📅 May 2026</span>
+          <button style="display: inline-flex; align-items: center; gap: 8px; background: #f4650c; color: #faf4e8; border: 2px solid #1c1b2e; border-radius: 999px; padding: 11px 22px; font-family: 'Public Sans', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; box-shadow: 3px 3px 0 #1c1b2e; transition: transform 0.15s ease, box-shadow 0.15s ease;" style-hover="transform: translate(-1px, -1px); box-shadow: 4px 4px 0 #1c1b2e;">＋ Add expense</button>
+        </div>
+
+        <div style="background: #1c1b2e; color: #faf4e8; border-radius: 18px; padding: 20px 24px; box-shadow: 4px 4px 0 #ffb02e;">
+          <p style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #ffb02e; margin: 0 0 12px 0;">✦ AI quick entry</p>
+          <div style="display: flex; gap: 12px;">
+            <input type="text" placeholder='Try "Spent ₹450 on pizza today"' style="flex: 1; background: rgba(250,244,232,0.08); border: 2px solid rgba(250,244,232,0.3); border-radius: 12px; padding: 13px 16px; font-family: 'Public Sans', sans-serif; font-size: 14px; color: #faf4e8; outline: none;" style-focus="border-color: #ffb02e;">
+            <button style="background: #ffb02e; color: #1c1b2e; border: 2px solid #faf4e8; border-radius: 12px; padding: 0 24px; font-family: 'Public Sans', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer;" style-hover="background: #f4650c; color: #faf4e8;">Parse ✦</button>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: baseline;">
+          <p style="font-size: 13px; font-weight: 600; color: rgba(28,27,46,0.6); margin: 0;">May 2026 · 7 transactions</p>
+          <p style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 18px; margin: 0;">−₹6,179</p>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div style="display: flex; align-items: center; gap: 14px; background: #ffffff; border: 2px solid #1c1b2e; border-radius: 16px; padding: 14px 18px;" style-hover="box-shadow: 3px 3px 0 #1c1b2e;">
+            <div style="height: 40px; width: 40px; border-radius: 12px; background: #fde3d3; border: 2px solid #1c1b2e; display: flex; align-items: center; justify-content: center; font-size: 17px;">🍕</div>
+            <div style="flex: 1; min-width: 0;">
+              <p style="font-size: 14px; font-weight: 700; margin: 0;">Domino's Pizza</p>
+              <div style="display: flex; align-items: center; gap: 8px; margin-top: 3px;"><span style="font-size: 11px; font-weight: 700; background: #faf4e8; border: 2px solid #1c1b2e; border-radius: 999px; padding: 1px 10px;">Food</span><span style="font-size: 12px; color: rgba(28,27,46,0.55);">May 10, 2026</span></div>
+            </div>
+            <span style="font-size: 15px; font-weight: 700;">−₹450</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(28,27,46,0.4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="cursor: pointer;"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" x2="10" y1="11" y2="17"></line><line x1="14" x2="14" y1="11" y2="17"></line></svg>
+          </div>
+          <div style="display: flex; align-items: center; gap: 14px; background: #ffffff; border: 2px solid #1c1b2e; border-radius: 16px; padding: 14px 18px;" style-hover="box-shadow: 3px 3px 0 #1c1b2e;">
+            <div style="height: 40px; width: 40px; border-radius: 12px; background: #ffedc7; border: 2px solid #1c1b2e; display: flex; align-items: center; justify-content: center; font-size: 17px;">🛒</div>
+            <div style="flex: 1; min-width: 0;">
+              <p style="font-size: 14px; font-weight: 700; margin: 0;">BigBasket</p>
+              <div style="display: flex; align-items: center; gap: 8px; margin-top: 3px;"><span style="font-size: 11px; font-weight: 700; background: #faf4e8; border: 2px solid #1c1b2e; border-radius: 999px; padding: 1px 10px;">Shopping</span><span style="font-size: 12px; color: rgba(28,27,46,0.55);">May 9, 2026</span></div>
+            </div>
+            <span style="font-size: 15px; font-weight: 700;">−₹1,240</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(28,27,46,0.4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="cursor: pointer;"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" x2="10" y1="11" y2="17"></line><line x1="14" x2="14" y1="11" y2="17"></line></svg>
+          </div>
+          <div style="display: flex; align-items: center; gap: 14px; background: #ffffff; border: 2px solid #1c1b2e; border-radius: 16px; padding: 14px 18px;" style-hover="box-shadow: 3px 3px 0 #1c1b2e;">
+            <div style="height: 40px; width: 40px; border-radius: 12px; background: #e8e0d0; border: 2px solid #1c1b2e; display: flex; align-items: center; justify-content: center; font-size: 17px;">⚡</div>
+            <div style="flex: 1; min-width: 0;">
+              <p style="font-size: 14px; font-weight: 700; margin: 0;">Electricity Bill</p>
+              <div style="display: flex; align-items: center; gap: 8px; margin-top: 3px;"><span style="font-size: 11px; font-weight: 700; background: #faf4e8; border: 2px solid #1c1b2e; border-radius: 999px; padding: 1px 10px;">Utilities</span><span style="font-size: 12px; color: rgba(28,27,46,0.55);">May 8, 2026</span><span style="font-size: 11px; font-weight: 700; color: #f4650c; border: 2px solid #f4650c; border-radius: 999px; padding: 1px 10px;">Recurring</span></div>
+            </div>
+            <span style="font-size: 15px; font-weight: 700;">−₹890</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(28,27,46,0.4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="cursor: pointer;"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" x2="10" y1="11" y2="17"></line><line x1="14" x2="14" y1="11" y2="17"></line></svg>
+          </div>
+          <div style="display: flex; align-items: center; gap: 14px; background: #ffffff; border: 2px solid #1c1b2e; border-radius: 16px; padding: 14px 18px;" style-hover="box-shadow: 3px 3px 0 #1c1b2e;">
+            <div style="height: 40px; width: 40px; border-radius: 12px; background: #d9f2e5; border: 2px solid #1c1b2e; display: flex; align-items: center; justify-content: center; font-size: 17px;">🚗</div>
+            <div style="flex: 1; min-width: 0;">
+              <p style="font-size: 14px; font-weight: 700; margin: 0;">Uber</p>
+              <div style="display: flex; align-items: center; gap: 8px; margin-top: 3px;"><span style="font-size: 11px; font-weight: 700; background: #faf4e8; border: 2px solid #1c1b2e; border-radius: 999px; padding: 1px 10px;">Transport</span><span style="font-size: 12px; color: rgba(28,27,46,0.55);">May 8, 2026</span></div>
+            </div>
+            <span style="font-size: 15px; font-weight: 700;">−₹220</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(28,27,46,0.4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="cursor: pointer;"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" x2="10" y1="11" y2="17"></line><line x1="14" x2="14" y1="11" y2="17"></line></svg>
+          </div>
+          <div style="display: flex; align-items: center; gap: 14px; background: #ffffff; border: 2px solid #1c1b2e; border-radius: 16px; padding: 14px 18px;" style-hover="box-shadow: 3px 3px 0 #1c1b2e;">
+            <div style="height: 40px; width: 40px; border-radius: 12px; background: #e3e0f2; border: 2px solid #1c1b2e; display: flex; align-items: center; justify-content: center; font-size: 17px;">📺</div>
+            <div style="flex: 1; min-width: 0;">
+              <p style="font-size: 14px; font-weight: 700; margin: 0;">Netflix</p>
+              <div style="display: flex; align-items: center; gap: 8px; margin-top: 3px;"><span style="font-size: 11px; font-weight: 700; background: #faf4e8; border: 2px solid #1c1b2e; border-radius: 999px; padding: 1px 10px;">Subscriptions</span><span style="font-size: 12px; color: rgba(28,27,46,0.55);">May 7, 2026</span><span style="font-size: 11px; font-weight: 700; color: #f4650c; border: 2px solid #f4650c; border-radius: 999px; padding: 1px 10px;">Recurring</span></div>
+            </div>
+            <span style="font-size: 15px; font-weight: 700;">−₹649</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(28,27,46,0.4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="cursor: pointer;"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" x2="10" y1="11" y2="17"></line><line x1="14" x2="14" y1="11" y2="17"></line></svg>
+          </div>
+          <div style="display: flex; align-items: center; gap: 14px; background: #ffffff; border: 2px solid #1c1b2e; border-radius: 16px; padding: 14px 18px;" style-hover="box-shadow: 3px 3px 0 #1c1b2e;">
+            <div style="height: 40px; width: 40px; border-radius: 12px; background: #fde3d3; border: 2px solid #1c1b2e; display: flex; align-items: center; justify-content: center; font-size: 17px;">🍜</div>
+            <div style="flex: 1; min-width: 0;">
+              <p style="font-size: 14px; font-weight: 700; margin: 0;">Swiggy</p>
+              <div style="display: flex; align-items: center; gap: 8px; margin-top: 3px;"><span style="font-size: 11px; font-weight: 700; background: #faf4e8; border: 2px solid #1c1b2e; border-radius: 999px; padding: 1px 10px;">Food</span><span style="font-size: 12px; color: rgba(28,27,46,0.55);">May 6, 2026</span></div>
+            </div>
+            <span style="font-size: 15px; font-weight: 700;">−₹380</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(28,27,46,0.4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="cursor: pointer;"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" x2="10" y1="11" y2="17"></line><line x1="14" x2="14" y1="11" y2="17"></line></svg>
+          </div>
+          <div style="display: flex; align-items: center; gap: 14px; background: #ffffff; border: 2px solid #1c1b2e; border-radius: 16px; padding: 14px 18px;" style-hover="box-shadow: 3px 3px 0 #1c1b2e;">
+            <div style="height: 40px; width: 40px; border-radius: 12px; background: #ffedc7; border: 2px solid #1c1b2e; display: flex; align-items: center; justify-content: center; font-size: 17px;">📦</div>
+            <div style="flex: 1; min-width: 0;">
+              <p style="font-size: 14px; font-weight: 700; margin: 0;">Amazon</p>
+              <div style="display: flex; align-items: center; gap: 8px; margin-top: 3px;"><span style="font-size: 11px; font-weight: 700; background: #faf4e8; border: 2px solid #1c1b2e; border-radius: 999px; padding: 1px 10px;">Shopping</span><span style="font-size: 12px; color: rgba(28,27,46,0.55);">May 5, 2026</span></div>
+            </div>
+            <span style="font-size: 15px; font-weight: 700;">−₹2,350</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(28,27,46,0.4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="cursor: pointer;"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" x2="10" y1="11" y2="17"></line><line x1="14" x2="14" y1="11" y2="17"></line></svg>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- ════ BUDGETS ════ -->
+    <sc-if value="{{ isBudgets }}" hint-placeholder-val="{{ false }}">
+      <div data-screen-label="Budgets" style="flex: 1; overflow-y: auto; padding: 28px; display: flex; flex-direction: column; gap: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 14px; font-weight: 700; background: #ffffff; border: 2px solid #1c1b2e; border-radius: 12px; padding: 10px 16px;">📅 May 2026</span>
+          <button style="display: inline-flex; align-items: center; gap: 8px; background: #f4650c; color: #faf4e8; border: 2px solid #1c1b2e; border-radius: 999px; padding: 11px 22px; font-family: 'Public Sans', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; box-shadow: 3px 3px 0 #1c1b2e; transition: transform 0.15s ease, box-shadow 0.15s ease;" style-hover="transform: translate(-1px, -1px); box-shadow: 4px 4px 0 #1c1b2e;">＋ Set budget</button>
+        </div>
+
+        <div style="background: #1c1b2e; color: #faf4e8; border-radius: 18px; padding: 24px; box-shadow: 4px 4px 0 #f4650c;">
+          <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 14px;">
+            <p style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 16px; margin: 0;">Overall budget</p>
+            <p style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 20px; margin: 0;">₹24,850 <span style="font-size: 14px; font-weight: 600; color: rgba(250,244,232,0.6);">/ ₹35,000</span></p>
+          </div>
+          <div style="height: 16px; border: 2px solid #faf4e8; border-radius: 999px; overflow: hidden; background: rgba(250,244,232,0.1);">
+            <div style="width: 71%; height: 100%; background: repeating-linear-gradient(45deg, #f4650c, #f4650c 8px, #ffb02e 8px, #ffb02e 16px);"></div>
+          </div>
+          <p style="font-size: 12px; font-weight: 600; color: rgba(250,244,232,0.6); margin: 10px 0 0 0;">71% of budget used in May 2026 · ₹10,150 remaining</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px;">
+          <div style="background: #ffffff; border: 2px solid #1c1b2e; border-radius: 18px; padding: 22px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+              <span style="font-size: 15px; font-weight: 700;">🍕 Food</span>
+              <span style="font-size: 12px; font-weight: 700; color: #d97706; background: #fff3d6; border: 2px solid #1c1b2e; border-radius: 999px; padding: 2px 12px;">78% used</span>
+            </div>
+            <div style="height: 12px; border: 2px solid #1c1b2e; border-radius: 999px; overflow: hidden; background: #faf4e8; margin-bottom: 12px;"><div style="width: 78%; height: 100%; background: repeating-linear-gradient(45deg, #d97706, #d97706 7px, #ffb02e 7px, #ffb02e 14px);"></div></div>
+            <p style="font-size: 13px; font-weight: 600; color: rgba(28,27,46,0.65); margin: 0;">Spent ₹6,240 of ₹8,000</p>
+            <p style="font-size: 12px; font-weight: 600; color: rgba(28,27,46,0.5); margin: 4px 0 0 0;">₹1,760 left</p>
+          </div>
+          <div style="background: #ffffff; border: 2px solid #d92d20; border-radius: 18px; padding: 22px; box-shadow: 3px 3px 0 #d92d20;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+              <span style="font-size: 15px; font-weight: 700;">⚡ Utilities</span>
+              <span style="font-size: 12px; font-weight: 700; color: #faf4e8; background: #d92d20; border: 2px solid #1c1b2e; border-radius: 999px; padding: 2px 12px;">97% used!</span>
+            </div>
+            <div style="height: 12px; border: 2px solid #1c1b2e; border-radius: 999px; overflow: hidden; background: #faf4e8; margin-bottom: 12px;"><div style="width: 97%; height: 100%; background: repeating-linear-gradient(45deg, #d92d20, #d92d20 7px, #f4650c 7px, #f4650c 14px);"></div></div>
+            <p style="font-size: 13px; font-weight: 600; color: rgba(28,27,46,0.65); margin: 0;">Spent ₹3,890 of ₹4,000</p>
+            <p style="font-size: 12px; font-weight: 700; color: #d92d20; margin: 4px 0 0 0;">Only ₹110 left ⚠</p>
+          </div>
+          <div style="background: #ffffff; border: 2px solid #1c1b2e; border-radius: 18px; padding: 22px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+              <span style="font-size: 15px; font-weight: 700;">🛒 Shopping</span>
+              <span style="font-size: 12px; font-weight: 700; color: #1e9e6a; background: #d9f2e5; border: 2px solid #1c1b2e; border-radius: 999px; padding: 2px 12px;">57% used</span>
+            </div>
+            <div style="height: 12px; border: 2px solid #1c1b2e; border-radius: 999px; overflow: hidden; background: #faf4e8; margin-bottom: 12px;"><div style="width: 57%; height: 100%; background: repeating-linear-gradient(45deg, #1e9e6a, #1e9e6a 7px, #6cc9a1 7px, #6cc9a1 14px);"></div></div>
+            <p style="font-size: 13px; font-weight: 600; color: rgba(28,27,46,0.65); margin: 0;">Spent ₹3,390 of ₹6,000</p>
+            <p style="font-size: 12px; font-weight: 600; color: rgba(28,27,46,0.5); margin: 4px 0 0 0;">₹2,610 left</p>
+          </div>
+          <div style="background: #ffffff; border: 2px solid #1c1b2e; border-radius: 18px; padding: 22px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+              <span style="font-size: 15px; font-weight: 700;">🚗 Transport</span>
+              <span style="font-size: 12px; font-weight: 700; color: #1e9e6a; background: #d9f2e5; border: 2px solid #1c1b2e; border-radius: 999px; padding: 2px 12px;">47% used</span>
+            </div>
+            <div style="height: 12px; border: 2px solid #1c1b2e; border-radius: 999px; overflow: hidden; background: #faf4e8; margin-bottom: 12px;"><div style="width: 47%; height: 100%; background: repeating-linear-gradient(45deg, #1e9e6a, #1e9e6a 7px, #6cc9a1 7px, #6cc9a1 14px);"></div></div>
+            <p style="font-size: 13px; font-weight: 600; color: rgba(28,27,46,0.65); margin: 0;">Spent ₹1,420 of ₹3,000</p>
+            <p style="font-size: 12px; font-weight: 600; color: rgba(28,27,46,0.5); margin: 4px 0 0 0;">₹1,580 left</p>
+          </div>
+          <div style="background: #ffffff; border: 2px solid #1c1b2e; border-radius: 18px; padding: 22px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+              <span style="font-size: 15px; font-weight: 700;">📺 Subscriptions</span>
+              <span style="font-size: 12px; font-weight: 700; color: #d97706; background: #fff3d6; border: 2px solid #1c1b2e; border-radius: 999px; padding: 2px 12px;">82% used</span>
+            </div>
+            <div style="height: 12px; border: 2px solid #1c1b2e; border-radius: 999px; overflow: hidden; background: #faf4e8; margin-bottom: 12px;"><div style="width: 82%; height: 100%; background: repeating-linear-gradient(45deg, #d97706, #d97706 7px, #ffb02e 7px, #ffb02e 14px);"></div></div>
+            <p style="font-size: 13px; font-weight: 600; color: rgba(28,27,46,0.65); margin: 0;">Spent ₹1,648 of ₹2,000</p>
+            <p style="font-size: 12px; font-weight: 600; color: rgba(28,27,46,0.5); margin: 4px 0 0 0;">₹352 left</p>
+          </div>
+          <div style="background: #ffffff; border: 2px solid #1c1b2e; border-radius: 18px; padding: 22px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+              <span style="font-size: 15px; font-weight: 700;">🎬 Entertainment</span>
+              <span style="font-size: 12px; font-weight: 700; color: #1e9e6a; background: #d9f2e5; border: 2px solid #1c1b2e; border-radius: 999px; padding: 2px 12px;">44% used</span>
+            </div>
+            <div style="height: 12px; border: 2px solid #1c1b2e; border-radius: 999px; overflow: hidden; background: #faf4e8; margin-bottom: 12px;"><div style="width: 44%; height: 100%; background: repeating-linear-gradient(45deg, #1e9e6a, #1e9e6a 7px, #6cc9a1 7px, #6cc9a1 14px);"></div></div>
+            <p style="font-size: 13px; font-weight: 600; color: rgba(28,27,46,0.65); margin: 0;">Spent ₹1,100 of ₹2,500</p>
+            <p style="font-size: 12px; font-weight: 600; color: rgba(28,27,46,0.5); margin: 4px 0 0 0;">₹1,400 left</p>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- ════ RECEIPTS ════ -->
+    <sc-if value="{{ isReceipts }}" hint-placeholder-val="{{ false }}">
+      <div data-screen-label="Receipts" style="flex: 1; overflow-y: auto; padding: 28px; display: flex; flex-direction: column; gap: 20px;">
+        <div style="background: #ffffff; border: 3px dashed #1c1b2e; border-radius: 22px; padding: 48px 32px; display: flex; flex-direction: column; align-items: center; gap: 14px; cursor: pointer; transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;" style-hover="background: #fff8ec; transform: translate(-2px, -2px); box-shadow: 5px 5px 0 #ffb02e;">
+          <div style="height: 60px; width: 60px; border-radius: 18px; background: #ffb02e; border: 2px solid #1c1b2e; display: flex; align-items: center; justify-content: center; box-shadow: 3px 3px 0 #1c1b2e;">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1c1b2e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"></path><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><path d="M12 17.5v-11"></path></svg>
+          </div>
+          <p style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 22px; margin: 0;">Drop your receipt here</p>
+          <p style="font-size: 14px; font-weight: 600; color: rgba(28,27,46,0.6); margin: 0; text-align: center;">or click to browse — AI extracts merchant, amount, date<br>and auto-categorizes the expense ✦</p>
+          <button style="background: #1c1b2e; color: #faf4e8; border: none; border-radius: 999px; padding: 12px 26px; font-family: 'Public Sans', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; box-shadow: 3px 3px 0 #f4650c; margin-top: 4px;">Choose file</button>
+          <p style="font-size: 12px; font-weight: 600; color: rgba(28,27,46,0.45); margin: 0;">JPG, PNG or PDF · up to 8 MB</p>
+        </div>
+
+        <p style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 16px; margin: 8px 0 0 0;">Recent receipts</p>
+
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: flex; gap: 16px; background: #ffffff; border: 2px solid #1c1b2e; border-radius: 16px; padding: 16px 18px; align-items: center;">
+            <div style="height: 56px; width: 56px; border-radius: 12px; background: repeating-linear-gradient(45deg, #f3ecdd, #f3ecdd 6px, #e8e0d0 6px, #e8e0d0 12px); border: 2px solid #1c1b2e; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0;">🧾</div>
+            <div style="flex: 1; min-width: 0;">
+              <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
+                <span style="font-size: 11px; font-weight: 700; color: #1e9e6a; background: #d9f2e5; border: 2px solid #1c1b2e; border-radius: 999px; padding: 1px 10px;">✓ Scanned</span>
+                <span style="font-size: 12px; color: rgba(28,27,46,0.55); font-weight: 600;">May 8, 2026</span>
+              </div>
+              <p style="font-size: 14px; font-weight: 700; margin: 0;">More Supermarket</p>
+              <p style="font-size: 12px; font-weight: 600; color: rgba(28,27,46,0.6); margin: 2px 0 0 0;"><span style="color: #f4650c; font-weight: 700;">₹1,846</span> · Grocery · Atta, milk, vegetables +6 more</p>
+            </div>
+          </div>
+          <div style="display: flex; gap: 16px; background: #ffffff; border: 2px solid #1c1b2e; border-radius: 16px; padding: 16px 18px; align-items: center;">
+            <div style="height: 56px; width: 56px; border-radius: 12px; background: repeating-linear-gradient(45deg, #f3ecdd, #f3ecdd 6px, #e8e0d0 6px, #e8e0d0 12px); border: 2px solid #1c1b2e; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0;">🧾</div>
+            <div style="flex: 1; min-width: 0;">
+              <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
+                <span style="font-size: 11px; font-weight: 700; color: #1c1b2e; background: #ffedc7; border: 2px solid #1c1b2e; border-radius: 999px; padding: 1px 10px;">⏳ Processing…</span>
+                <span style="font-size: 12px; color: rgba(28,27,46,0.55); font-weight: 600;">May 8, 2026</span>
+              </div>
+              <p style="font-size: 14px; font-weight: 700; margin: 0;">Reading receipt with AI…</p>
+              <p style="font-size: 12px; font-weight: 600; color: rgba(28,27,46,0.6); margin: 2px 0 0 0;">This usually takes a few seconds</p>
+            </div>
+          </div>
+          <div style="display: flex; gap: 16px; background: #ffffff; border: 2px solid #1c1b2e; border-radius: 16px; padding: 16px 18px; align-items: center;">
+            <div style="height: 56px; width: 56px; border-radius: 12px; background: repeating-linear-gradient(45deg, #f3ecdd, #f3ecdd 6px, #e8e0d0 6px, #e8e0d0 12px); border: 2px solid #1c1b2e; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0;">🧾</div>
+            <div style="flex: 1; min-width: 0;">
+              <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
+                <span style="font-size: 11px; font-weight: 700; color: #1e9e6a; background: #d9f2e5; border: 2px solid #1c1b2e; border-radius: 999px; padding: 1px 10px;">✓ Scanned</span>
+                <span style="font-size: 12px; color: rgba(28,27,46,0.55); font-weight: 600;">May 6, 2026</span>
+              </div>
+              <p style="font-size: 14px; font-weight: 700; margin: 0;">Apollo Pharmacy</p>
+              <p style="font-size: 12px; font-weight: 600; color: rgba(28,27,46,0.6); margin: 2px 0 0 0;"><span style="color: #f4650c; font-weight: 700;">₹432</span> · Health · Paracetamol, vitamins</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- ════ ANALYTICS ════ -->
+    <sc-if value="{{ isAnalytics }}" hint-placeholder-val="{{ false }}">
+      <div data-screen-label="Analytics" style="flex: 1; overflow-y: auto; padding: 28px; display: flex; flex-direction: column; gap: 20px;">
+        <span style="align-self: flex-start; font-size: 14px; font-weight: 700; background: #ffffff; border: 2px solid #1c1b2e; border-radius: 12px; padding: 10px 16px;">📅 May 2026</span>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 18px;">
+          <div style="background: #ffffff; border: 2px solid #1c1b2e; border-radius: 18px; padding: 24px;">
+            <p style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 16px; margin: 0 0 20px 0;">Category breakdown — May 2026</p>
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+              <div><div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; margin-bottom: 4px;"><span>🍕 Food</span><span>₹7,690</span></div><div style="height: 14px; border: 2px solid #1c1b2e; border-radius: 999px; background: #faf4e8; overflow: hidden;"><div style="width: 100%; height: 100%; background: #f4650c;"></div></div></div>
+              <div><div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; margin-bottom: 4px;"><span>🛒 Shopping</span><span>₹5,480</span></div><div style="height: 14px; border: 2px solid #1c1b2e; border-radius: 999px; background: #faf4e8; overflow: hidden;"><div style="width: 71%; height: 100%; background: #ffb02e;"></div></div></div>
+              <div><div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; margin-bottom: 4px;"><span>⚡ Utilities</span><span>₹4,210</span></div><div style="height: 14px; border: 2px solid #1c1b2e; border-radius: 999px; background: #faf4e8; overflow: hidden;"><div style="width: 55%; height: 100%; background: #1c1b2e;"></div></div></div>
+              <div><div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; margin-bottom: 4px;"><span>🚗 Transport</span><span>₹2,980</span></div><div style="height: 14px; border: 2px solid #1c1b2e; border-radius: 999px; background: #faf4e8; overflow: hidden;"><div style="width: 39%; height: 100%; background: #1e9e6a;"></div></div></div>
+              <div><div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; margin-bottom: 4px;"><span>📺 Subscriptions</span><span>₹2,490</span></div><div style="height: 14px; border: 2px solid #1c1b2e; border-radius: 999px; background: #faf4e8; overflow: hidden;"><div style="width: 32%; height: 100%; background: #8d86c9;"></div></div></div>
+              <div><div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; margin-bottom: 4px;"><span>🎬 Entertainment</span><span>₹2,000</span></div><div style="height: 14px; border: 2px solid #1c1b2e; border-radius: 999px; background: #faf4e8; overflow: hidden;"><div style="width: 26%; height: 100%; background: #e8e0d0;"></div></div></div>
+            </div>
+          </div>
+
+          <div style="background: #ffffff; border: 2px solid #1c1b2e; border-radius: 18px; padding: 24px;">
+            <p style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 16px; margin: 0 0 20px 0;">Spending by day of week <span style="font-size: 12px; font-weight: 600; color: rgba(28,27,46,0.5);">(last 90 days)</span></p>
+            <div style="display: flex; align-items: flex-end; gap: 12px; height: 180px;">
+              <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; height: 100%; justify-content: flex-end;"><div style="width: 100%; height: 58%; background: #ffb02e; border: 2px solid #1c1b2e; border-radius: 8px 8px 0 0; border-bottom: none; box-sizing: border-box;"></div><span style="font-size: 11px; font-weight: 700;">Sun</span></div>
+              <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; height: 100%; justify-content: flex-end;"><div style="width: 100%; height: 32%; background: #e8e0d0; border: 2px solid #1c1b2e; border-radius: 8px 8px 0 0; border-bottom: none; box-sizing: border-box;"></div><span style="font-size: 11px; font-weight: 700;">Mon</span></div>
+              <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; height: 100%; justify-content: flex-end;"><div style="width: 100%; height: 28%; background: #e8e0d0; border: 2px solid #1c1b2e; border-radius: 8px 8px 0 0; border-bottom: none; box-sizing: border-box;"></div><span style="font-size: 11px; font-weight: 700;">Tue</span></div>
+              <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; height: 100%; justify-content: flex-end;"><div style="width: 100%; height: 36%; background: #e8e0d0; border: 2px solid #1c1b2e; border-radius: 8px 8px 0 0; border-bottom: none; box-sizing: border-box;"></div><span style="font-size: 11px; font-weight: 700;">Wed</span></div>
+              <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; height: 100%; justify-content: flex-end;"><div style="width: 100%; height: 42%; background: #e8e0d0; border: 2px solid #1c1b2e; border-radius: 8px 8px 0 0; border-bottom: none; box-sizing: border-box;"></div><span style="font-size: 11px; font-weight: 700;">Thu</span></div>
+              <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; height: 100%; justify-content: flex-end;"><div style="width: 100%; height: 68%; background: #ffb02e; border: 2px solid #1c1b2e; border-radius: 8px 8px 0 0; border-bottom: none; box-sizing: border-box;"></div><span style="font-size: 11px; font-weight: 700;">Fri</span></div>
+              <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; height: 100%; justify-content: flex-end;"><div style="width: 100%; height: 100%; background: #f4650c; border: 2px solid #1c1b2e; border-radius: 8px 8px 0 0; border-bottom: none; box-sizing: border-box;"></div><span style="font-size: 11px; font-weight: 800;">Sat</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="background: #ffffff; border: 2px solid #1c1b2e; border-radius: 18px; padding: 24px;">
+          <p style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 16px; margin: 0 0 16px 0;">12-month trend</p>
+          <svg viewBox="0 0 720 170" style="width: 100%; height: auto; display: block;">
+            <line x1="0" y1="150" x2="720" y2="150" stroke="#1c1b2e" stroke-width="2"></line>
+            <line x1="0" y1="105" x2="720" y2="105" stroke="rgba(28,27,46,0.1)" stroke-width="2" stroke-dasharray="4 6"></line>
+            <line x1="0" y1="60" x2="720" y2="60" stroke="rgba(28,27,46,0.1)" stroke-width="2" stroke-dasharray="4 6"></line>
+            <polyline points="20,96 80,80 140,102 200,66 260,88 320,74 380,58 440,82 500,70 560,90 620,62 700,28" fill="none" stroke="#f4650c" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></polyline>
+            <circle cx="20" cy="96" r="5" fill="#ffb02e" stroke="#1c1b2e" stroke-width="2"></circle>
+            <circle cx="140" cy="102" r="5" fill="#ffb02e" stroke="#1c1b2e" stroke-width="2"></circle>
+            <circle cx="260" cy="88" r="5" fill="#ffb02e" stroke="#1c1b2e" stroke-width="2"></circle>
+            <circle cx="380" cy="58" r="5" fill="#ffb02e" stroke="#1c1b2e" stroke-width="2"></circle>
+            <circle cx="500" cy="70" r="5" fill="#ffb02e" stroke="#1c1b2e" stroke-width="2"></circle>
+            <circle cx="620" cy="62" r="5" fill="#ffb02e" stroke="#1c1b2e" stroke-width="2"></circle>
+            <circle cx="700" cy="28" r="6" fill="#f4650c" stroke="#1c1b2e" stroke-width="2"></circle>
+          </svg>
+          <div style="display: flex; justify-content: space-between; font-size: 11px; font-weight: 700; color: rgba(28,27,46,0.5); margin-top: 8px;">
+            <span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span style="color: #f4650c;">May</span>
+          </div>
+        </div>
+
+        <div style="background: #ffffff; border: 2px solid #1c1b2e; border-radius: 18px; padding: 24px;">
+          <p style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 16px; margin: 0 0 14px 0;">Subscription tracker <span style="font-size: 12px; font-weight: 600; color: rgba(28,27,46,0.5);">(last 90 days)</span></p>
+          <div style="display: flex; flex-direction: column;">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 2px solid rgba(28,27,46,0.08);">
+              <div><p style="font-size: 14px; font-weight: 700; margin: 0;">Netflix</p><p style="font-size: 12px; font-weight: 600; color: rgba(28,27,46,0.55); margin: 0;">May 7, 2026 · monthly</p></div>
+              <span style="font-size: 14px; font-weight: 700;">₹649</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 2px solid rgba(28,27,46,0.08);">
+              <div><p style="font-size: 14px; font-weight: 700; margin: 0;">Spotify</p><p style="font-size: 12px; font-weight: 600; color: rgba(28,27,46,0.55); margin: 0;">May 3, 2026 · monthly</p></div>
+              <span style="font-size: 14px; font-weight: 700;">₹119</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0;">
+              <div><p style="font-size: 14px; font-weight: 700; margin: 0;">Amazon Prime</p><p style="font-size: 12px; font-weight: 600; color: rgba(28,27,46,0.55); margin: 0;">Apr 28, 2026 · monthly</p></div>
+              <span style="font-size: 14px; font-weight: 700;">₹299</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- ════ ASSISTANT ════ -->
+    <sc-if value="{{ isAssistant }}" hint-placeholder-val="{{ false }}">
+      <div data-screen-label="Assistant" style="flex: 1; min-height: 0; display: flex; flex-direction: column;">
+        <div style="flex: 1; overflow-y: auto; padding: 28px; display: flex; flex-direction: column; gap: 18px;">
+          <div style="display: flex; gap: 12px; max-width: 720px;">
+            <div style="height: 36px; width: 36px; border-radius: 12px; background: #1c1b2e; border: 2px solid #1c1b2e; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 2px 2px 0 #ffb02e;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ffb02e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"></path><rect width="16" height="12" x="4" y="8" rx="2"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M15 13v2"></path><path d="M9 13v2"></path></svg>
+            </div>
+            <div style="background: #ffffff; border: 2px solid #1c1b2e; border-radius: 18px; border-top-left-radius: 4px; padding: 14px 18px; font-size: 14px; line-height: 1.6;">
+              Hi Priya! 👋 I've been watching your May spending. You're <strong>71% through your budget</strong> with 19 days left — want me to flag where you could slow down?
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 12px; max-width: 720px; margin-left: auto; flex-direction: row-reverse;">
+            <div style="height: 36px; width: 36px; border-radius: 50%; background: #ffb02e; border: 2px solid #1c1b2e; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 12px;">PS</div>
+            <div style="background: #f4650c; color: #faf4e8; border: 2px solid #1c1b2e; border-radius: 18px; border-top-right-radius: 4px; padding: 14px 18px; font-size: 14px; line-height: 1.6; box-shadow: 3px 3px 0 #1c1b2e;">
+              Why did I overspend on utilities this month?
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 12px; max-width: 720px;">
+            <div style="height: 36px; width: 36px; border-radius: 12px; background: #1c1b2e; border: 2px solid #1c1b2e; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 2px 2px 0 #ffb02e;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ffb02e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"></path><rect width="16" height="12" x="4" y="8" rx="2"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M15 13v2"></path><path d="M9 13v2"></path></svg>
+            </div>
+            <div style="background: #ffffff; border: 2px solid #1c1b2e; border-radius: 18px; border-top-left-radius: 4px; padding: 14px 18px; font-size: 14px; line-height: 1.65;">
+              Your utilities hit <strong>₹3,890 of a ₹4,000 budget (97%)</strong> — that's ₹1,140 more than April. Two reasons:
+              <br>1. <strong>Electricity bill jumped to ₹890</strong> (+38%) — likely summer AC usage
+              <br>2. A <strong>₹650 water tanker charge</strong> you didn't have last month
+              <br><br>💡 Tip: your electricity bills peak May–July. Want me to raise the utilities budget to ₹4,500 for summer months?
+            </div>
+          </div>
+        </div>
+
+        <div style="padding: 0 28px 12px 28px; display: flex; gap: 10px; flex-wrap: wrap;">
+          <span style="font-size: 12px; font-weight: 700; background: #ffffff; border: 2px solid #1c1b2e; border-radius: 999px; padding: 7px 16px; cursor: pointer;" style-hover="background: #ffb02e;">How can I save ₹5,000 more?</span>
+          <span style="font-size: 12px; font-weight: 700; background: #ffffff; border: 2px solid #1c1b2e; border-radius: 999px; padding: 7px 16px; cursor: pointer;" style-hover="background: #ffb02e;">Which subscription should I cancel?</span>
+          <span style="font-size: 12px; font-weight: 700; background: #ffffff; border: 2px solid #1c1b2e; border-radius: 999px; padding: 7px 16px; cursor: pointer;" style-hover="background: #ffb02e;">Am I on track with my budgets?</span>
+        </div>
+
+        <div style="border-top: 2px solid #1c1b2e; padding: 16px 28px; display: flex; gap: 12px; background: #faf4e8;">
+          <input type="text" placeholder="Ask about your finances… ✦" style="flex: 1; background: #ffffff; border: 2px solid #1c1b2e; border-radius: 999px; padding: 13px 22px; font-family: 'Public Sans', sans-serif; font-size: 14px; color: #1c1b2e; outline: none;" style-focus="box-shadow: 3px 3px 0 #ffb02e;">
+          <button style="height: 48px; width: 48px; border-radius: 50%; background: #f4650c; border: 2px solid #1c1b2e; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 3px 3px 0 #1c1b2e; transition: transform 0.15s ease;" style-hover="transform: translate(-1px, -1px);">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#faf4e8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"></path><path d="M22 2 11 13"></path></svg>
+          </button>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- ════ REPORTS ════ -->
+    <sc-if value="{{ isReports }}" hint-placeholder-val="{{ false }}">
+      <div data-screen-label="Reports" style="flex: 1; overflow-y: auto; padding: 28px; display: flex; flex-direction: column; gap: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 16px;">
+          <div>
+            <p style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 17px; margin: 0;">AI-generated weekly reports</p>
+            <p style="font-size: 13px; font-weight: 600; color: rgba(28,27,46,0.6); margin: 4px 0 0 0;">Automatically sent every Monday · PDF with full analytics attached</p>
+          </div>
+          <button style="display: inline-flex; align-items: center; gap: 8px; background: #f4650c; color: #faf4e8; border: 2px solid #1c1b2e; border-radius: 999px; padding: 12px 24px; font-family: 'Public Sans', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; box-shadow: 3px 3px 0 #1c1b2e; transition: transform 0.15s ease, box-shadow 0.15s ease; flex-shrink: 0;" style-hover="transform: translate(-1px, -1px); box-shadow: 4px 4px 0 #1c1b2e;">✦ Generate now</button>
+        </div>
+
+        <div style="background: #ffffff; border: 2px solid #1c1b2e; border-radius: 18px; padding: 24px; box-shadow: 4px 4px 0 #ffb02e;">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap;">
+            <div>
+              <p style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 18px; margin: 0;">Week of May 4 – May 10, 2026</p>
+              <p style="font-size: 13px; font-weight: 600; color: rgba(28,27,46,0.6); margin: 6px 0 0 0;">Total spent: <span style="color: #f4650c; font-weight: 700;">₹6,420</span> · Top category: Food</p>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span style="font-size: 12px; font-weight: 700; background: #d9f2e5; color: #1e9e6a; border: 2px solid #1c1b2e; border-radius: 999px; padding: 3px 14px;">✉ Sent</span>
+              <span style="font-size: 12px; font-weight: 700; border: 2px solid #1c1b2e; border-radius: 999px; padding: 3px 14px; cursor: pointer;" style-hover="background: #ffb02e;">Hide ▲</span>
+            </div>
+          </div>
+          <div style="margin-top: 16px; background: #faf4e8; border: 2px solid rgba(28,27,46,0.15); border-radius: 14px; padding: 18px 20px; font-size: 14px; line-height: 1.7;">
+            <p style="margin: 0 0 10px 0;"><strong>The headline:</strong> you spent ₹6,420 this week — 8% less than last week. 👏</p>
+            <p style="margin: 0 0 10px 0;"><strong>What went well:</strong> food delivery dropped from 6 orders to 3, saving roughly ₹900. Transport stayed flat.</p>
+            <p style="margin: 0;"><strong>Watch out:</strong> utilities are at 97% of budget with 3 weeks left in the month. One more big bill will tip you over — consider the ₹4,500 summer budget we discussed.</p>
+          </div>
+        </div>
+
+        <div style="background: #ffffff; border: 2px solid #1c1b2e; border-radius: 18px; padding: 24px;">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap;">
+            <div>
+              <p style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 18px; margin: 0;">Week of Apr 27 – May 3, 2026</p>
+              <p style="font-size: 13px; font-weight: 600; color: rgba(28,27,46,0.6); margin: 6px 0 0 0;">Total spent: <span style="color: #f4650c; font-weight: 700;">₹6,980</span> · Top category: Shopping</p>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span style="font-size: 12px; font-weight: 700; background: #d9f2e5; color: #1e9e6a; border: 2px solid #1c1b2e; border-radius: 999px; padding: 3px 14px;">✉ Sent</span>
+              <span style="font-size: 12px; font-weight: 700; border: 2px solid #1c1b2e; border-radius: 999px; padding: 3px 14px; cursor: pointer;" style-hover="background: #ffb02e;">View ▼</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="background: #ffffff; border: 2px solid #1c1b2e; border-radius: 18px; padding: 24px;">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap;">
+            <div>
+              <p style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 18px; margin: 0;">Week of Apr 20 – Apr 26, 2026</p>
+              <p style="font-size: 13px; font-weight: 600; color: rgba(28,27,46,0.6); margin: 6px 0 0 0;">Total spent: <span style="color: #f4650c; font-weight: 700;">₹5,180</span> · Top category: Food</p>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span style="font-size: 12px; font-weight: 700; background: #d9f2e5; color: #1e9e6a; border: 2px solid #1c1b2e; border-radius: 999px; padding: 3px 14px;">✉ Sent</span>
+              <span style="font-size: 12px; font-weight: 700; border: 2px solid #1c1b2e; border-radius: 999px; padding: 3px 14px; cursor: pointer;" style-hover="background: #ffb02e;">View ▼</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { page: "dashboard" };
+
+  renderVals() {
+    const page = this.state.page;
+    const titles = {
+      dashboard: "Dashboard",
+      expenses: "Expenses",
+      budgets: "Budgets",
+      receipts: "Receipt Scanner",
+      analytics: "Analytics",
+      assistant: "AI Assistant",
+      reports: "Weekly Reports",
+    };
+    const pages = ["dashboard", "expenses", "budgets", "receipts", "analytics", "assistant", "reports"];
+    const vals = { pageTitle: titles[page] };
+    for (const p of pages) {
+      const cap = p.charAt(0).toUpperCase() + p.slice(1);
+      vals["is" + cap] = page === p;
+      vals["go" + cap] = (e) => { if (e) e.preventDefault(); this.setState({ page: p }); };
+      vals["navBg" + cap] = page === p ? "#f4650c" : "transparent";
+      vals["navFg" + cap] = page === p ? "#faf4e8" : "rgba(250,244,232,0.65)";
+    }
+    return vals;
+  }
+}
+</script>
+</body>
+</html>

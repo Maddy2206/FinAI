@@ -41,13 +41,15 @@ export default function DashboardPage() {
     return (
       <>
         <Header title="Dashboard" />
-        <div className="flex-1 overflow-y-auto p-6 space-y-6">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-24 rounded-xl" />)}
+        <div className="flex-1 space-y-5.5 overflow-y-auto p-7">
+          <div className="grid grid-cols-2 gap-4.5 lg:grid-cols-4">
+            {[...Array(4)].map((_, i) => (
+              <Skeleton key={i} className="h-24 rounded-[18px]" />
+            ))}
           </div>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            <Skeleton className="h-64 rounded-xl lg:col-span-2" />
-            <Skeleton className="h-64 rounded-xl" />
+          <div className="grid grid-cols-1 gap-4.5 lg:grid-cols-3">
+            <Skeleton className="h-64 rounded-[18px] lg:col-span-2" />
+            <Skeleton className="h-64 rounded-[18px]" />
           </div>
         </div>
       </>
@@ -57,7 +59,7 @@ export default function DashboardPage() {
   return (
     <>
       <Header title="Dashboard" />
-      <div className="flex-1 overflow-y-auto p-6 space-y-6">
+      <div className="flex-1 space-y-5.5 overflow-y-auto p-7">
         <StatsCards
           totalSpent={totalSpent}
           totalBudget={totalBudget}
@@ -66,14 +68,14 @@ export default function DashboardPage() {
           healthScore={healthScore ?? 75}
         />
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 gap-4.5 lg:grid-cols-3">
           <div className="lg:col-span-2">
             <MonthlyTrendChart data={monthlyTotals ?? []} />
           </div>
           <FinancialHealthScore score={healthScore ?? 75} />
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4.5 lg:grid-cols-2">
           <SpendingPieChart data={categorySummary ?? []} />
           <BudgetProgressBars budgets={budgetUtilization ?? []} />
         </div>

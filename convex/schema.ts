@@ -30,6 +30,7 @@ export default defineSchema({
     description: v.string(),
     date: v.number(),
     isRecurring: v.boolean(),
+    icon: v.optional(v.string()),
     receiptId: v.optional(v.id("receipts")),
     source: v.union(v.literal("manual"), v.literal("ocr"), v.literal("nlp")),
     createdAt: v.number(),
@@ -42,6 +43,7 @@ export default defineSchema({
     category: expenseCategory,
     monthlyLimit: v.number(),
     month: v.string(),
+    icon: v.optional(v.string()),
     createdAt: v.number(),
   })
     .index("by_user", ["userId"])

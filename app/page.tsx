@@ -1,12 +1,12 @@
-"use client";
-
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { ThemeToggle } from "@/components/shared/ThemeToggle";
 import {
-  TrendingUp, BarChart3, Bot, Receipt, Shield, Zap,
-  ArrowRight, Sparkles, CheckCircle,
+  TrendingUp,
+  BarChart3,
+  Bot,
+  Receipt,
+  Shield,
+  Zap,
+  ArrowRight,
 } from "lucide-react";
 
 const features = [
@@ -14,478 +14,430 @@ const features = [
     icon: Receipt,
     title: "AI Receipt Scanning",
     desc: "Upload any receipt photo. AI extracts merchant, amount, and category automatically.",
-    color: "text-violet-500",
-    bg: "bg-violet-500/10",
+    bg: "bg-marigold",
+    iconColor: "#1c1b2e",
   },
   {
     icon: Bot,
     title: "AI Financial Assistant",
     desc: "Ask anything about your spending in plain language. Get real, personalized answers.",
-    color: "text-sky-500",
-    bg: "bg-sky-500/10",
+    bg: "bg-orange",
+    iconColor: "#faf4e8",
   },
   {
     icon: BarChart3,
     title: "Smart Analytics",
     desc: "Beautiful charts showing spending trends, category breakdowns, and a financial health score.",
-    color: "text-emerald-500",
-    bg: "bg-emerald-500/10",
+    bg: "bg-ink",
+    iconColor: "#ffb02e",
   },
   {
     icon: Zap,
     title: "Natural Language Entry",
     desc: 'Type "Spent ₹450 on pizza today" and AI logs it instantly with the right category.',
-    color: "text-amber-500",
-    bg: "bg-amber-500/10",
+    bg: "bg-ink",
+    iconColor: "#faf4e8",
   },
   {
     icon: Shield,
     title: "Budget Alerts",
     desc: "Get alerted before you overspend. AI catches unusual transactions in real time.",
-    color: "text-rose-500",
-    bg: "bg-rose-500/10",
+    bg: "bg-marigold",
+    iconColor: "#1c1b2e",
   },
   {
     icon: TrendingUp,
     title: "Weekly AI Reports",
     desc: "Every Monday, receive an AI-generated spending summary delivered to your inbox.",
-    color: "text-cyan-500",
-    bg: "bg-cyan-500/10",
+    bg: "bg-orange",
+    iconColor: "#faf4e8",
   },
 ];
 
 const steps = [
   {
-    icon: TrendingUp,
-    title: "Create Your Account",
+    n: 1,
+    color: "text-marigold",
+    title: "Create your account",
     desc: "Sign up in seconds. No credit card required. Start fresh or import existing data.",
   },
   {
-    icon: Receipt,
-    title: "Log Your Expenses",
+    n: 2,
+    color: "text-orange",
+    title: "Log your expenses",
     desc: "Scan receipts, type naturally, or let AI auto-categorize transactions as they happen.",
   },
   {
-    icon: BarChart3,
-    title: "Get AI Insights",
+    n: 3,
+    color: "text-marigold",
+    title: "Get AI insights",
     desc: "Receive personalized weekly reports and actionable advice to reach your financial goals.",
   },
 ];
 
 const stats = [
-  { value: "50K+", label: "Active Users", emoji: "👥" },
-  { value: "₹500Cr+", label: "Spending Tracked", emoji: "💰" },
-  { value: "4.9 ★", label: "App Rating", emoji: "⭐" },
+  { value: "50K+", label: "Active users", tone: "bg-white", rotate: "-rotate-1" },
+  { value: "₹500Cr+", label: "Spending tracked", tone: "bg-marigold", rotate: "rotate-1" },
+  { value: "4.9 ★", label: "App rating", tone: "bg-white", rotate: "-rotate-1" },
 ];
 
-export default function HomePage() {
-  const [scrolled, setScrolled] = useState(false);
+const tickerText =
+  "TRACK EVERY RUPEE ✦ SCAN ANY RECEIPT ✦ ASK AI ANYTHING ✦ WEEKLY REPORTS ✦ BUDGET ALERTS ✦ 50K+ USERS ✦ ₹500Cr+ TRACKED ✦ ";
 
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
+function Logo({ size = 34, iconSize = 16 }: { size?: number; iconSize?: number }) {
   return (
-    <>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap');
+    <div
+      className="flex items-center justify-center rounded-[10px] border-2 border-ink bg-orange shadow-[2px_2px_0_var(--ink)]"
+      style={{ height: size, width: size }}
+    >
+      <TrendingUp
+        style={{ height: iconSize, width: iconSize }}
+        stroke="#faf4e8"
+        strokeWidth={2.5}
+      />
+    </div>
+  );
+}
 
-        .font-display { font-family: 'Syne', sans-serif; }
+export default function HomePage() {
+  return (
+    <div className="min-h-screen bg-cream text-ink">
+      {/* NAVBAR */}
+      <header className="sticky top-0 z-50 border-b-2 border-ink bg-cream">
+        <nav className="mx-auto flex h-[72px] max-w-[1240px] items-center justify-between px-8">
+          <Link href="/" className="flex items-center gap-2.5">
+            <Logo />
+            <span className="font-heading text-[21px] font-extrabold">
+              Fin<span className="text-orange">AI</span>
+            </span>
+          </Link>
 
-        @keyframes floatCard {
-          0%, 100% { transform: translateY(0px) rotate(-2deg); }
-          50%       { transform: translateY(-14px) rotate(-2deg); }
-        }
-        @keyframes fadeUp {
-          from { opacity: 0; transform: translateY(28px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
+          <div className="hidden items-center gap-8 text-sm font-semibold md:flex">
+            <a href="#features" className="hover:text-orange">
+              Features
+            </a>
+            <a href="#how-it-works" className="hover:text-orange">
+              How it works
+            </a>
+          </div>
 
-        .card-float { animation: floatCard 7s ease-in-out infinite; }
-
-        .fu1 { animation: fadeUp 0.65s ease-out 0.05s both; }
-        .fu2 { animation: fadeUp 0.65s ease-out 0.18s both; }
-        .fu3 { animation: fadeUp 0.65s ease-out 0.31s both; }
-        .fu4 { animation: fadeUp 0.65s ease-out 0.44s both; }
-        .fu5 { animation: fadeUp 0.65s ease-out 0.57s both; }
-
-        .gradient-text {
-          background: linear-gradient(135deg, var(--foreground) 0%, var(--primary) 55%, oklch(0.7 0.18 200) 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
-        }
-
-        .dot-bg {
-          background-image: radial-gradient(circle, color-mix(in oklch, var(--foreground) 12%, transparent) 1px, transparent 1px);
-          background-size: 22px 22px;
-        }
-
-        .glass {
-          background: color-mix(in oklch, var(--card) 82%, transparent);
-          backdrop-filter: blur(18px);
-          -webkit-backdrop-filter: blur(18px);
-        }
-
-        .primary-glow {
-          box-shadow: 0 0 0 1px color-mix(in oklch, var(--primary) 28%, transparent),
-                      0 8px 40px color-mix(in oklch, var(--primary) 14%, transparent);
-        }
-
-        .hero-radial {
-          background: radial-gradient(ellipse 75% 50% at 50% -5%,
-            color-mix(in oklch, var(--primary) 18%, transparent), transparent 70%);
-        }
-
-        .feature-card:hover .feature-icon {
-          transform: scale(1.12);
-          transition: transform 0.25s ease;
-        }
-        .feature-icon { transition: transform 0.25s ease; }
-      `}</style>
-
-      <div className="min-h-screen bg-background" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-
-        {/* ── NAVBAR ── */}
-        <header className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
-          scrolled
-            ? "bg-background/80 backdrop-blur-xl border-b border-border/60 shadow-sm"
-            : "bg-transparent"
-        }`}>
-          <nav className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-            <Link href="/" className="flex items-center gap-2.5">
-              <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center shadow-md shadow-primary/30">
-                <TrendingUp className="h-4 w-4 text-primary-foreground" />
-              </div>
-              <span className="font-display font-700 text-lg text-foreground">
-                Fin<span className="text-primary">AI</span>
-              </span>
+          <div className="flex items-center gap-3.5">
+            <Link
+              href="/sign-in"
+              className="rounded-full border-2 border-transparent px-4.5 py-2.5 text-sm font-bold hover:border-ink"
+            >
+              Sign in
             </Link>
+            <Link
+              href="/sign-up"
+              className="inline-flex items-center gap-1.5 rounded-full border-2 border-ink bg-ink px-5.5 py-2.5 text-sm font-bold text-cream shadow-[3px_3px_0_var(--orange)] transition-[transform,box-shadow] duration-150 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0_var(--orange)]"
+            >
+              Get started ↗
+            </Link>
+          </div>
+        </nav>
+      </header>
 
-            <div className="hidden md:flex items-center gap-8">
-              {["Features", "How it Works"].map((label) => (
-                <a
-                  key={label}
-                  href={`#${label.toLowerCase().replace(/ /g, "-")}`}
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  {label}
-                </a>
-              ))}
+      {/* HERO */}
+      <section className="relative overflow-hidden">
+        <div className="mx-auto grid max-w-[1240px] grid-cols-1 items-center gap-14 px-8 py-16 lg:grid-cols-[1.15fr_1fr] lg:py-24">
+          <div>
+            <div
+              className="animate-fade-up mb-7 inline-flex items-center gap-2 rounded-full border-2 border-ink bg-marigold px-4.5 py-1.5 text-[13px] font-bold shadow-[2px_2px_0_var(--ink)]"
+              style={{ animationDelay: "0.05s" }}
+            >
+              ✦ Smart finance, simplified
             </div>
 
-            <div className="flex items-center gap-3">
-              <ThemeToggle />
-              <Button variant="ghost" size="sm" asChild>
-                <Link href="/sign-in">Sign In</Link>
-              </Button>
-              <Button size="sm" className="shadow-lg shadow-primary/25" asChild>
-                <Link href="/sign-up">
-                  Get Started <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
-                </Link>
-              </Button>
+            <h1
+              className="animate-fade-up mb-7 font-heading text-[48px] font-extrabold leading-[0.98] tracking-[-0.03em] sm:text-[64px] lg:text-[82px]"
+              style={{ animationDelay: "0.15s" }}
+            >
+              Your money,{" "}
+              <span
+                style={{
+                  backgroundImage:
+                    "linear-gradient(transparent 55%, #ffb02e 55%, #ffb02e 92%, transparent 92%)",
+                }}
+              >
+                finally clear.
+              </span>
+            </h1>
+
+            <p
+              className="animate-fade-up mb-10 max-w-[480px] text-[19px] leading-relaxed text-ink/70"
+              style={{ animationDelay: "0.25s" }}
+            >
+              Scan receipts instantly, track every rupee, and get AI-powered
+              insights that actually help you spend smarter — all in one app.
+            </p>
+
+            <div
+              className="animate-fade-up mb-8 flex flex-wrap gap-3.5"
+              style={{ animationDelay: "0.35s" }}
+            >
+              <Link
+                href="/sign-up"
+                className="inline-flex items-center gap-2 rounded-full border-2 border-ink bg-orange px-8.5 py-4.5 text-[17px] font-bold text-cream shadow-[4px_4px_0_var(--ink)] transition-[transform,box-shadow] duration-150 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0_var(--ink)]"
+              >
+                Start for free →
+              </Link>
+              <Link
+                href="/sign-in"
+                className="inline-flex items-center rounded-full border-2 border-ink bg-cream px-8.5 py-4.5 text-[17px] font-bold transition-[transform,box-shadow] duration-150 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[3px_3px_0_var(--marigold)]"
+              >
+                Sign in
+              </Link>
             </div>
-          </nav>
-        </header>
 
-        {/* ── HERO ── */}
-        <section className="relative min-h-screen flex items-center overflow-hidden pt-16">
-          <div className="absolute inset-0 dot-bg opacity-40" />
-          <div className="absolute inset-0 hero-radial pointer-events-none" />
-          <div className="absolute top-1/3 -right-48 w-[700px] h-[700px] rounded-full bg-primary/5 blur-[140px] pointer-events-none" />
-          <div className="absolute bottom-0 -left-48 w-[500px] h-[500px] rounded-full bg-primary/5 blur-[120px] pointer-events-none" />
+            <div
+              className="animate-fade-up flex flex-wrap gap-6 text-[13px] font-semibold text-ink/60"
+              style={{ animationDelay: "0.45s" }}
+            >
+              <span>✓ No credit card</span>
+              <span>✓ Free forever plan</span>
+              <span>✓ 2-min setup</span>
+            </div>
+          </div>
 
-          <div className="max-w-7xl mx-auto px-6 py-24 grid lg:grid-cols-2 gap-16 items-center w-full">
-            {/* Copy */}
-            <div>
-              <div className="fu1 inline-flex items-center gap-2 border border-primary/30 bg-primary/8 text-primary rounded-full px-4 py-1.5 text-xs font-medium mb-8">
-                <Sparkles className="h-3 w-3" />
-                Smart finance, simplified
+          {/* Stacked mockup cards */}
+          <div
+            className="animate-fade-up relative flex flex-col gap-4.5"
+            style={{ animationDelay: "0.3s" }}
+          >
+            <div className="animate-bob rounded-[22px] border-2 border-ink bg-white px-7.5 py-6.5 shadow-[6px_6px_0_var(--ink)]">
+              <div className="mb-2 flex items-center justify-between">
+                <p className="text-xs font-bold uppercase tracking-[0.08em] text-ink/55">
+                  Spent this month
+                </p>
+                <span className="rounded-full border-2 border-ink bg-cream px-2.5 py-0.5 text-[11px] font-bold">
+                  May 2026
+                </span>
               </div>
-
-              <h1 className="fu2 font-display text-5xl lg:text-6xl xl:text-[4.25rem] font-800 leading-[1.06] tracking-tight mb-6">
-                <span className="text-foreground">Your Money,</span>
-                <br />
-                <span className="gradient-text">Finally Clear.</span>
-              </h1>
-
-              <p className="fu3 text-lg text-muted-foreground leading-relaxed mb-10 max-w-lg">
-                Scan receipts instantly, track every rupee, and get AI-powered insights that actually help you spend smarter — all in one app.
+              <p className="font-heading text-[46px] font-extrabold tracking-[-0.02em]">
+                ₹24,850{" "}
+                <span className="text-[17px] text-orange">of ₹35,000</span>
               </p>
-
-              <div className="fu4 flex flex-wrap gap-4 mb-10">
-                <Button
-                  size="lg"
-                  className="h-12 px-8 text-base shadow-2xl shadow-primary/30 hover:shadow-primary/45 transition-all"
-                  asChild
-                >
-                  <Link href="/sign-up">
-                    Start for Free
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
-                <Button variant="outline" size="lg" className="h-12 px-8 text-base" asChild>
-                  <Link href="/sign-in">Sign In</Link>
-                </Button>
+              <div className="mt-4 h-3.5 overflow-hidden rounded-full border-2 border-ink bg-cream">
+                <div
+                  className="h-full w-[71%]"
+                  style={{
+                    backgroundImage:
+                      "repeating-linear-gradient(45deg, #f4650c, #f4650c 8px, #ffb02e 8px, #ffb02e 16px)",
+                  }}
+                />
               </div>
-
-              <div className="fu5 flex flex-wrap items-center gap-5">
-                {["No credit card", "Free forever plan", "2-min setup"].map((item) => (
-                  <div key={item} className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                    <CheckCircle className="h-3.5 w-3.5 text-primary shrink-0" />
-                    {item}
-                  </div>
-                ))}
+              <div className="mt-2.5 flex justify-between text-xs font-semibold text-ink/60">
+                <span>71% used</span>
+                <span>₹10,150 left</span>
               </div>
             </div>
 
-            {/* Dashboard Mockup */}
-            <div className="hidden lg:flex justify-center items-center">
-              <div className="card-float relative w-[370px]">
-                <div className="absolute inset-0 rounded-2xl bg-primary/15 blur-3xl scale-90 -z-10" />
-
-                <div className="glass primary-glow rounded-2xl overflow-hidden border border-border/60">
-                  {/* Header */}
-                  <div className="px-5 py-3.5 border-b border-border/50 flex items-center justify-between bg-card/50">
-                    <div className="flex items-center gap-2">
-                      <div className="h-6 w-6 rounded-md bg-primary flex items-center justify-center">
-                        <TrendingUp className="h-3 w-3 text-primary-foreground" />
-                      </div>
-                      <span className="text-sm font-semibold text-foreground font-display">FinAI</span>
-                    </div>
-                    <span className="text-[11px] text-muted-foreground bg-muted/60 px-2 py-0.5 rounded-full">May 2026</span>
-                  </div>
-
-                  {/* Stats */}
-                  <div className="px-4 py-4 grid grid-cols-3 gap-2.5 border-b border-border/50">
-                    {[
-                      { label: "Spent", value: "₹24,850", cls: "text-rose-500" },
-                      { label: "Budget", value: "₹35,000", cls: "text-foreground" },
-                      { label: "Saved", value: "₹10,150", cls: "text-emerald-500" },
-                    ].map((s) => (
-                      <div key={s.label} className="bg-muted/40 rounded-xl p-2.5">
-                        <p className="text-[9px] text-muted-foreground mb-1 uppercase tracking-wide">{s.label}</p>
-                        <p className={`text-xs font-bold ${s.cls}`}>{s.value}</p>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Mini bar chart */}
-                  <div className="px-4 py-4 border-b border-border/50">
-                    <p className="text-[9px] text-muted-foreground uppercase tracking-wide mb-3">6-month trend</p>
-                    <div className="flex items-end gap-1.5 h-14">
-                      {[38, 62, 44, 78, 52, 100].map((h, i) => (
-                        <div key={i} className="flex-1 flex items-end">
-                          <div
-                            className="w-full rounded-t-sm"
-                            style={{
-                              height: `${h}%`,
-                              background: i === 5
-                                ? "var(--primary)"
-                                : `color-mix(in oklch, var(--primary) ${35 + i * 10}%, var(--muted))`,
-                            }}
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Transactions */}
-                  <div className="px-4 py-4 space-y-2.5">
-                    <p className="text-[9px] text-muted-foreground uppercase tracking-wide">Recent</p>
-                    {[
-                      { emoji: "🍕", name: "Domino's Pizza", amt: "−₹450", cat: "Food" },
-                      { emoji: "🛒", name: "BigBasket", amt: "−₹1,240", cat: "Shopping" },
-                      { emoji: "⚡", name: "Electricity Bill", amt: "−₹890", cat: "Utilities" },
-                    ].map((t) => (
-                      <div key={t.name} className="flex items-center gap-2.5">
-                        <span className="text-sm">{t.emoji}</span>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-[11px] font-medium text-foreground truncate">{t.name}</p>
-                          <p className="text-[9px] text-muted-foreground">{t.cat}</p>
-                        </div>
-                        <span className="text-[11px] font-semibold text-rose-500">{t.amt}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Savings badge */}
-                <div className="absolute -top-3 -right-3 glass border border-border/60 rounded-xl px-3 py-2 shadow-xl primary-glow">
-                  <div className="flex items-center gap-2">
-                    <div className="h-6 w-6 rounded-full bg-emerald-500/20 flex items-center justify-center">
-                      <TrendingUp className="h-3 w-3 text-emerald-500" />
-                    </div>
-                    <div>
-                      <p className="text-[9px] text-muted-foreground">Savings rate</p>
-                      <p className="text-xs font-bold text-emerald-500">+29% ↑</p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* AI badge */}
-                <div className="absolute -bottom-3 -left-3 glass border border-border/60 rounded-xl px-3 py-2 shadow-xl">
-                  <div className="flex items-center gap-2">
-                    <div className="h-6 w-6 rounded-full bg-primary/20 flex items-center justify-center">
-                      <Bot className="h-3 w-3 text-primary" />
-                    </div>
-                    <p className="text-[10px] text-foreground font-medium">AI analysed your report</p>
-                  </div>
-                </div>
+            <div className="flex gap-4.5">
+              <div className="flex-1 rotate-1 rounded-[22px] bg-ink px-6 py-5.5 text-cream shadow-[5px_5px_0_var(--marigold)]">
+                <p className="mb-1.5 text-xs font-bold uppercase tracking-[0.08em] text-cream/60">
+                  Saved
+                </p>
+                <p className="font-heading text-[32px] font-extrabold">
+                  ₹10,150
+                </p>
+                <p className="mt-1 text-sm font-bold text-marigold">
+                  +29% vs April ↑
+                </p>
+              </div>
+              <div className="flex-[1.2] -rotate-1 rounded-[22px] border-2 border-ink bg-white px-6 py-5.5 shadow-[5px_5px_0_var(--ink)]">
+                <p className="mb-2 text-xs font-bold uppercase tracking-[0.08em] text-ink/55">
+                  You typed
+                </p>
+                <p className="text-[15px] font-semibold leading-snug">
+                  &ldquo;Spent ₹450 on pizza today&rdquo; 🍕
+                </p>
+                <p className="mt-2.5 inline-block rounded-full bg-orange/10 px-3 py-1 text-[13px] font-bold text-orange">
+                  → Food · logged ✓
+                </p>
               </div>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* ── STATS ── */}
-        <div className="border-y border-border/50 bg-card/30">
-          <div className="max-w-4xl mx-auto px-6 py-12 grid grid-cols-3 divide-x divide-border/50">
-            {stats.map((s) => (
-              <div key={s.label} className="text-center px-4">
-                <p className="text-2xl mb-2">{s.emoji}</p>
-                <p className="font-display text-3xl lg:text-4xl font-800 text-foreground">{s.value}</p>
-                <p className="text-sm text-muted-foreground mt-1">{s.label}</p>
+      {/* TICKER */}
+      <div className="overflow-hidden border-y-2 border-ink bg-orange py-3.5">
+        <div className="flex w-max animate-marquee">
+          <span className="whitespace-nowrap pr-6 font-heading text-base font-bold text-cream">
+            {tickerText}
+          </span>
+          <span className="whitespace-nowrap pr-6 font-heading text-base font-bold text-cream">
+            {tickerText}
+          </span>
+        </div>
+      </div>
+
+      {/* STATS */}
+      <div className="mx-auto grid max-w-[1000px] grid-cols-1 gap-5 px-8 py-18 sm:grid-cols-3">
+        {stats.map((s) => (
+          <div
+            key={s.label}
+            className={`${s.tone} ${s.rotate} rounded-[22px] border-2 border-ink px-5 py-7.5 text-center shadow-[4px_4px_0_var(--ink)]`}
+          >
+            <p className="font-heading text-[44px] font-extrabold tracking-[-0.02em]">
+              {s.value}
+            </p>
+            <p className="mt-1.5 text-sm font-semibold text-ink/65">
+              {s.label}
+            </p>
+          </div>
+        ))}
+      </div>
+
+      {/* FEATURES */}
+      <section id="features" className="px-8 pb-26 pt-10">
+        <div className="mx-auto max-w-[1240px]">
+          <div className="mb-14 text-center">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border-2 border-ink bg-white px-4.5 py-1.5 text-[13px] font-bold shadow-[2px_2px_0_var(--ink)]">
+              ✦ Everything you need
+            </div>
+            <h2 className="mb-4.5 font-heading text-[36px] font-extrabold leading-[1.02] tracking-[-0.02em] sm:text-[56px]">
+              Built for how you
+              <br />
+              <span
+                style={{
+                  backgroundImage:
+                    "linear-gradient(transparent 55%, #ffb02e 55%, #ffb02e 92%, transparent 92%)",
+                }}
+              >
+                actually spend
+              </span>
+            </h2>
+            <p className="mx-auto max-w-[540px] text-base leading-relaxed text-ink/65">
+              From instant receipt scanning to weekly AI reports — every
+              feature is designed to make financial clarity effortless.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 gap-5.5 sm:grid-cols-2 lg:grid-cols-3">
+            {features.map((f) => {
+              const Icon = f.icon;
+              return (
+                <div
+                  key={f.title}
+                  className="rounded-[22px] border-2 border-ink bg-white p-7 transition-[transform,box-shadow] duration-150 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0_var(--ink)]"
+                >
+                  <div
+                    className={`mb-4.5 flex h-[46px] w-[46px] items-center justify-center rounded-[14px] border-2 border-ink ${f.bg}`}
+                  >
+                    <Icon
+                      style={{ height: 20, width: 20 }}
+                      stroke={f.iconColor}
+                      strokeWidth={2}
+                    />
+                  </div>
+                  <h3 className="mb-2 font-heading text-[19px] font-bold">
+                    {f.title}
+                  </h3>
+                  <p className="text-sm leading-relaxed text-ink/65">
+                    {f.desc}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* HOW IT WORKS */}
+      <section
+        id="how-it-works"
+        className="border-t-2 border-ink bg-ink px-8 py-26 text-cream"
+      >
+        <div className="mx-auto max-w-[1100px]">
+          <div className="mb-16 text-center">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border-2 border-cream bg-orange px-4.5 py-1.5 text-[13px] font-bold text-cream">
+              ✦ Simple by design
+            </div>
+            <h2 className="mb-4.5 font-heading text-[36px] font-extrabold leading-[1.02] tracking-[-0.02em] sm:text-[56px]">
+              Up and running
+              <br />
+              <span className="text-marigold">in 3 steps</span>
+            </h2>
+            <p className="mx-auto max-w-[440px] text-base leading-relaxed text-cream/65">
+              No complicated setup. No lengthy onboarding. Just sign up and
+              start tracking.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
+            {steps.map((step, i) => (
+              <div
+                key={step.title}
+                className="rounded-[22px] border-2 border-cream/25 bg-cream/[0.06] p-7.5"
+                style={i === 1 ? { transform: "translateY(16px)" } : i === 2 ? { transform: "translateY(32px)" } : undefined}
+              >
+                <div className={`mb-4 font-heading text-[40px] font-extrabold ${step.color}`}>
+                  {step.n}
+                </div>
+                <h3 className="mb-2.5 font-heading text-xl font-bold">
+                  {step.title}
+                </h3>
+                <p className="text-sm leading-relaxed text-cream/65">
+                  {step.desc}
+                </p>
               </div>
             ))}
           </div>
         </div>
+      </section>
 
-        {/* ── FEATURES ── */}
-        <section id="features" className="py-28 px-6">
-          <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-16">
-              <div className="inline-flex items-center gap-2 border border-border/50 rounded-full px-4 py-1.5 text-xs text-muted-foreground mb-5">
-                <Sparkles className="h-3 w-3 text-primary" />
-                Everything you need
-              </div>
-              <h2 className="font-display text-4xl lg:text-5xl font-700 text-foreground mb-5 leading-tight">
-                Built for how you
-                <br />
-                <span className="gradient-text">actually spend</span>
-              </h2>
-              <p className="text-muted-foreground max-w-xl mx-auto leading-relaxed">
-                From instant receipt scanning to weekly AI reports — every feature is designed to make financial clarity effortless.
-              </p>
-            </div>
-
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {features.map((f) => {
-                const Icon = f.icon;
-                return (
-                  <div
-                    key={f.title}
-                    className="feature-card group bg-card border border-border/50 rounded-2xl p-6 hover:border-primary/25 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300 cursor-default"
-                  >
-                    <div className={`feature-icon h-11 w-11 rounded-xl ${f.bg} flex items-center justify-center mb-5`}>
-                      <Icon className={`h-5 w-5 ${f.color}`} />
-                    </div>
-                    <h3 className="font-semibold text-foreground mb-2">{f.title}</h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">{f.desc}</p>
-                  </div>
-                );
-              })}
-            </div>
+      {/* CTA */}
+      <section className="px-8 py-26">
+        <div className="relative mx-auto max-w-[880px] overflow-hidden rounded-[28px] border-2 border-ink bg-marigold px-8 py-18 text-center shadow-[8px_8px_0_var(--ink)] sm:px-12">
+          <div className="absolute left-9 top-6 -rotate-[8deg] font-heading text-2xl font-extrabold">
+            ₹
           </div>
-        </section>
-
-        {/* ── HOW IT WORKS ── */}
-        <section id="how-it-works" className="py-28 px-6 bg-card/20 border-y border-border/50">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-16">
-              <h2 className="font-display text-4xl lg:text-5xl font-700 text-foreground mb-5 leading-tight">
-                Up and running
-                <br />
-                <span className="gradient-text">in 3 steps</span>
-              </h2>
-              <p className="text-muted-foreground max-w-md mx-auto">
-                No complicated setup. No lengthy onboarding. Just sign up and start tracking.
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-3 gap-10 relative">
-              {steps.map((step, i) => {
-                const Icon = step.icon;
-                return (
-                  <div key={step.title} className="relative text-center">
-                    <div className="relative inline-flex mb-6">
-                      <div className="h-16 w-16 rounded-2xl bg-card border border-border/60 shadow-md flex items-center justify-center">
-                        <Icon className="h-7 w-7 text-primary" />
-                      </div>
-                      <span className="absolute -top-2 -right-2 h-5 w-5 rounded-full bg-primary text-primary-foreground text-[10px] font-bold flex items-center justify-center font-display">
-                        {i + 1}
-                      </span>
-                    </div>
-                    {i < 2 && (
-                      <div className="hidden md:block absolute top-8 left-[calc(50%+2.75rem)] right-0 h-px bg-gradient-to-r from-border/80 to-transparent" />
-                    )}
-                    <h3 className="font-semibold text-foreground mb-2">{step.title}</h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">{step.desc}</p>
-                  </div>
-                );
-              })}
-            </div>
+          <div className="absolute bottom-7 right-10 rotate-[10deg] font-heading text-[32px] font-extrabold opacity-50">
+            ₹
           </div>
-        </section>
+          <h2 className="mb-5 font-heading text-[36px] font-extrabold leading-[1.0] tracking-[-0.02em] sm:text-[58px]">
+            Start saving smarter <span className="text-orange">today</span>
+          </h2>
+          <p className="mx-auto mb-10 max-w-[460px] text-base leading-relaxed text-ink/70">
+            Join thousands of Indians who&apos;ve transformed their
+            relationship with money using FinAI. It&apos;s free to start.
+          </p>
+          <Link
+            href="/sign-up"
+            className="inline-flex items-center gap-2 rounded-full border-2 border-ink bg-ink px-10 py-4.5 text-[17px] font-bold text-cream shadow-[4px_4px_0_var(--cream)] transition-[transform,box-shadow] duration-150 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0_var(--cream)]"
+          >
+            Get started — it&apos;s free <ArrowRight className="h-4 w-4" />
+          </Link>
+          <p className="mt-4.5 text-[13px] font-semibold text-ink/60">
+            No credit card required · Cancel anytime
+          </p>
+        </div>
+      </section>
 
-        {/* ── CTA ── */}
-        <section className="py-28 px-6">
-          <div className="max-w-3xl mx-auto relative">
-            <div className="absolute inset-0 rounded-3xl bg-primary/8 blur-3xl scale-95 pointer-events-none" />
-            <div className="relative bg-card border border-primary/20 rounded-3xl overflow-hidden primary-glow">
-              <div className="absolute inset-0 dot-bg opacity-25 pointer-events-none" />
-              <div className="absolute -top-24 -right-24 w-64 h-64 rounded-full bg-primary/10 blur-3xl pointer-events-none" />
-              <div className="relative px-10 py-16 text-center">
-                <div className="text-5xl mb-5">💸</div>
-                <h2 className="font-display text-4xl lg:text-5xl font-700 text-foreground mb-5 leading-tight">
-                  Start saving smarter
-                  <br />
-                  <span className="gradient-text">today</span>
-                </h2>
-                <p className="text-muted-foreground mb-10 max-w-md mx-auto leading-relaxed">
-                  Join thousands of Indians who&apos;ve transformed their relationship with money using FinAI. It&apos;s free to start.
-                </p>
-                <Button
-                  size="lg"
-                  className="h-12 px-10 text-base shadow-2xl shadow-primary/30 hover:shadow-primary/45 transition-all"
-                  asChild
-                >
-                  <Link href="/sign-up">
-                    Get Started — It&apos;s Free
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
-                <p className="mt-4 text-xs text-muted-foreground">No credit card required · Cancel anytime</p>
-              </div>
-            </div>
+      {/* FOOTER */}
+      <footer className="border-t-2 border-ink px-8 py-8">
+        <div className="mx-auto flex max-w-[1240px] flex-wrap items-center justify-between gap-4">
+          <div className="flex items-center gap-2.5">
+            <Logo size={26} iconSize={12} />
+            <span className="font-heading text-base font-bold">
+              Fin<span className="text-orange">AI</span>
+            </span>
           </div>
-        </section>
-
-        {/* ── FOOTER ── */}
-        <footer className="border-t border-border/50 px-6 py-8">
-          <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-2">
-              <div className="h-6 w-6 rounded-md bg-primary flex items-center justify-center">
-                <TrendingUp className="h-3 w-3 text-primary-foreground" />
-              </div>
-              <span className="font-display font-600 text-sm text-foreground">
-                Fin<span className="text-primary">AI</span>
-              </span>
-            </div>
-            <p className="text-xs text-muted-foreground">
-              © 2026 FinAI. All rights reserved.
-            </p>
-            <div className="flex gap-6">
-              {[["Sign In", "/sign-in"], ["Sign Up", "/sign-up"]].map(([label, href]) => (
-                <Link key={label} href={href} className="text-xs text-muted-foreground hover:text-foreground transition-colors">
-                  {label}
-                </Link>
-              ))}
-            </div>
+          <p className="text-[13px] font-medium text-ink/55">
+            © 2026 FinAI. All rights reserved.
+          </p>
+          <div className="flex gap-6 text-[13px] font-semibold">
+            <Link href="/sign-in" className="hover:text-orange">
+              Sign in
+            </Link>
+            <Link href="/sign-up" className="hover:text-orange">
+              Sign up
+            </Link>
           </div>
-        </footer>
-      </div>
-    </>
+        </div>
+      </footer>
+    </div>
   );
 }

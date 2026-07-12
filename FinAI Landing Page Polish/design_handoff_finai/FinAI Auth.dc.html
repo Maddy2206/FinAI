@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FinAI — Sign in</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Public+Sans:wght@400;500;600;700&display=swap');
+body { margin: 0; background: #faf4e8; }
+a { color: #f4650c; text-decoration: none; }
+a:hover { color: #1c1b2e; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes floatA { 0%, 100% { transform: rotate(-2deg) translateY(0); } 50% { transform: rotate(-2deg) translateY(-10px); } }
+@keyframes floatB { 0%, 100% { transform: rotate(2deg) translateY(0); } 50% { transform: rotate(2deg) translateY(-14px); } }
+</style>
+</helmet>
+
+<div data-screen-label="Auth" style="display: flex; min-height: 100vh; background: #faf4e8; color: #1c1b2e; font-family: 'Public Sans', sans-serif;">
+
+  <!-- ══ LEFT PANEL — navy, decorative ══ -->
+  <div style="width: 50%; flex-shrink: 0; position: relative; overflow: hidden; background: #1c1b2e; color: #faf4e8; display: flex; flex-direction: column; justify-content: space-between; padding: 56px 60px; box-sizing: border-box; border-right: 2px solid #1c1b2e;">
+    <div style="position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(250,244,232,0.1) 1px, transparent 1px); background-size: 24px 24px; pointer-events: none;"><div style="animation: floatA 7s ease-in-out infinite; position: absolute; top: 45px; z-index: 1; background: #faf4e8; color: #1c1b2e; border: 2px solid #1c1b2e; border-radius: 18px; padding: 18px 22px; box-shadow: 5px 5px 0 #f4650c; width: 190px; left: 292px">
+      <p style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(28,27,46,0.55); margin: 0 0 6px 0;">Saved this month</p>
+      <p style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 28px; margin: 0;">₹10,150</p>
+      <p style="font-size: 13px; font-weight: 700; color: #1e9e6a; margin: 6px 0 0 0;">+29% vs last month ↑</p>
+    </div></div>
+
+    <div style="position: relative; z-index: 1;">
+      <div style="animation: fadeUp 0.6s ease-out 0.05s both; display: flex; align-items: center; gap: 10px; margin-bottom: 64px;">
+        <div style="height: 34px; width: 34px; border-radius: 10px; background: #f4650c; border: 2px solid #faf4e8; display: flex; align-items: center; justify-content: center; box-shadow: 2px 2px 0 #faf4e8;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#faf4e8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg>
+        </div>
+        <span style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 21px;">Fin<span style="color: #ffb02e;">AI</span></span>
+      </div>
+
+      <sc-if value="{{ isSignIn }}" hint-placeholder-val="{{ true }}">
+        <h1 style="animation: fadeUp 0.6s ease-out 0.15s both; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 56px; line-height: 1.0; letter-spacing: -0.02em; margin: 0 0 20px 0;">Welcome <span style="background: linear-gradient(transparent 55%, #f4650c 55%, #f4650c 92%, transparent 92%);">back.</span></h1>
+        <p style="animation: fadeUp 0.6s ease-out 0.25s both; font-size: 16px; color: rgba(250,244,232,0.6); line-height: 1.65; max-width: 380px; margin: 0 0 44px 0;">Your finances don't take a break — sign in to see where you stand and what's changed since your last visit.</p>
+      </sc-if>
+      <sc-if value="{{ isSignUp }}" hint-placeholder-val="{{ false }}">
+        <h1 style="animation: fadeUp 0.6s ease-out 0.15s both; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 56px; line-height: 1.0; letter-spacing: -0.02em; margin: 0 0 20px 0;">Money, <span style="background: linear-gradient(transparent 55%, #f4650c 55%, #f4650c 92%, transparent 92%);">sorted.</span></h1>
+        <p style="animation: fadeUp 0.6s ease-out 0.25s both; font-size: 16px; color: rgba(250,244,232,0.6); line-height: 1.65; max-width: 380px; margin: 0 0 44px 0;">Join 50,000+ Indians tracking every rupee with AI. Free forever, 2-minute setup, no credit card.</p>
+      </sc-if>
+
+      <div style="animation: fadeUp 0.6s ease-out 0.35s both; display: flex; flex-direction: column; gap: 16px;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="height: 32px; width: 32px; border-radius: 10px; background: rgba(250,244,232,0.1); border: 2px solid rgba(250,244,232,0.25); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ffb02e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"></path><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><path d="M12 17.5v-11"></path></svg>
+          </div>
+          <span style="font-size: 14px; color: rgba(250,244,232,0.75); font-weight: 500;">Scan receipts instantly — AI does the rest</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="height: 32px; width: 32px; border-radius: 10px; background: rgba(250,244,232,0.1); border: 2px solid rgba(250,244,232,0.25); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ffb02e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"></path><rect width="16" height="12" x="4" y="8" rx="2"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M15 13v2"></path><path d="M9 13v2"></path></svg>
+          </div>
+          <span style="font-size: 14px; color: rgba(250,244,232,0.75); font-weight: 500;">Personalized insights on your spending habits</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="height: 32px; width: 32px; border-radius: 10px; background: rgba(250,244,232,0.1); border: 2px solid rgba(250,244,232,0.25); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ffb02e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1 1 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path></svg>
+          </div>
+          <span style="font-size: 14px; color: rgba(250,244,232,0.75); font-weight: 500;">Smart budget alerts before you overspend</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="height: 32px; width: 32px; border-radius: 10px; background: rgba(250,244,232,0.1); border: 2px solid rgba(250,244,232,0.25); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ffb02e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="M18 17V9"></path><path d="M13 17V5"></path><path d="M8 17v-3"></path></svg>
+          </div>
+          <span style="font-size: 14px; color: rgba(250,244,232,0.75); font-weight: 500;">Weekly reports delivered to your inbox</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- floating cards -->
+    
+
+    <div style="animation: floatB 9s ease-in-out 1.5s infinite; position: absolute; bottom: 170px; right: 60px; z-index: 1; background: #ffb02e; color: #1c1b2e; border: 2px solid #1c1b2e; border-radius: 18px; padding: 16px 20px; box-shadow: 5px 5px 0 #faf4e8; width: 170px;">
+      <p style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(28,27,46,0.6); margin: 0 0 8px 0;">Health score</p>
+      <p style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 32px; margin: 0;">87<span style="font-size: 15px; font-weight: 600; color: rgba(28,27,46,0.55);"> / 100</span></p>
+      <div style="margin-top: 10px; height: 10px; border: 2px solid #1c1b2e; border-radius: 999px; overflow: hidden; background: #faf4e8;">
+        <div style="width: 87%; height: 100%; background: #1c1b2e;"></div>
+      </div>
+      <p style="font-size: 12px; font-weight: 700; margin: 8px 0 0 0;">Excellent ✓</p>
+    </div>
+
+    <div style="animation: floatA 6s ease-in-out 3s infinite; position: absolute; bottom: 72px; left: 60px; z-index: 1; background: #faf4e8; color: #1c1b2e; border: 2px solid #1c1b2e; border-radius: 14px; padding: 10px 16px; box-shadow: 4px 4px 0 #ffb02e;">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <span style="font-size: 16px;">🛒</span>
+        <div>
+          <p style="font-size: 13px; font-weight: 700; margin: 0;">BigBasket</p>
+          <p style="font-size: 11px; color: rgba(28,27,46,0.55); margin: 0;">Shopping · 2h ago</p>
+        </div>
+        <span style="font-size: 13px; font-weight: 700; margin-left: 8px;">−₹1,240</span>
+      </div>
+    </div>
+
+    <p style="position: relative; z-index: 1; font-size: 12px; color: rgba(250,244,232,0.35); margin: 0;">© 2026 FinAI. All rights reserved.</p>
+  </div>
+
+  <!-- ══ RIGHT PANEL — form ══ -->
+  <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 48px 32px; box-sizing: border-box;">
+    <div style="width: 100%; max-width: 400px;">
+
+      <sc-if value="{{ isSignIn }}" hint-placeholder-val="{{ true }}">
+        <h2 style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 32px; margin: 0 0 8px 0; letter-spacing: -0.01em;">Sign in to Fin<span style="color: #f4650c;">AI</span></h2>
+        <p style="font-size: 14px; color: rgba(28,27,46,0.6); margin: 0 0 32px 0;">Welcome back — your dashboard is waiting.</p>
+      </sc-if>
+      <sc-if value="{{ isSignUp }}" hint-placeholder-val="{{ false }}">
+        <h2 style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 32px; margin: 0 0 8px 0; letter-spacing: -0.01em;">Create your account</h2>
+        <p style="font-size: 14px; color: rgba(28,27,46,0.6); margin: 0 0 32px 0;">Free forever · no credit card · 2-min setup.</p>
+      </sc-if>
+
+      <button style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; background: #ffffff; border: 2px solid #1c1b2e; border-radius: 14px; padding: 14px; font-family: 'Public Sans', sans-serif; font-size: 15px; font-weight: 700; color: #1c1b2e; cursor: pointer; transition: transform 0.15s ease, box-shadow 0.15s ease; box-sizing: border-box;" style-hover="transform: translate(-2px, -2px); box-shadow: 4px 4px 0 #1c1b2e;">
+        <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"></path><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"></path><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"></path><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"></path></svg>
+        Continue with Google
+      </button>
+
+      <div style="display: flex; align-items: center; gap: 14px; margin: 24px 0;">
+        <div style="flex: 1; height: 2px; background: rgba(28,27,46,0.12);"></div>
+        <span style="font-size: 12px; font-weight: 700; color: rgba(28,27,46,0.45); text-transform: uppercase; letter-spacing: 0.08em;">or</span>
+        <div style="flex: 1; height: 2px; background: rgba(28,27,46,0.12);"></div>
+      </div>
+
+      <sc-if value="{{ isSignUp }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-bottom: 18px;">
+          <label style="display: block; font-size: 13px; font-weight: 700; margin-bottom: 8px;">Full name</label>
+          <input type="text" placeholder="Priya Sharma" style="width: 100%; box-sizing: border-box; background: #ffffff; border: 2px solid #1c1b2e; border-radius: 14px; padding: 14px 16px; font-family: 'Public Sans', sans-serif; font-size: 15px; color: #1c1b2e; outline: none;" style-focus="box-shadow: 3px 3px 0 #ffb02e;">
+        </div>
+      </sc-if>
+
+      <div style="margin-bottom: 18px;">
+        <label style="display: block; font-size: 13px; font-weight: 700; margin-bottom: 8px;">Email address</label>
+        <input type="email" placeholder="you@example.com" style="width: 100%; box-sizing: border-box; background: #ffffff; border: 2px solid #1c1b2e; border-radius: 14px; padding: 14px 16px; font-family: 'Public Sans', sans-serif; font-size: 15px; color: #1c1b2e; outline: none;" style-focus="box-shadow: 3px 3px 0 #ffb02e;">
+      </div>
+
+      <div style="margin-bottom: 28px;">
+        <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px;">
+          <label style="font-size: 13px; font-weight: 700;">Password</label>
+          <sc-if value="{{ isSignIn }}" hint-placeholder-val="{{ true }}">
+            <a href="#" style="font-size: 12px; font-weight: 600;">Forgot password?</a>
+          </sc-if>
+        </div>
+        <input type="password" placeholder="••••••••" style="width: 100%; box-sizing: border-box; background: #ffffff; border: 2px solid #1c1b2e; border-radius: 14px; padding: 14px 16px; font-family: 'Public Sans', sans-serif; font-size: 15px; color: #1c1b2e; outline: none;" style-focus="box-shadow: 3px 3px 0 #ffb02e;">
+      </div>
+
+      <sc-if value="{{ isSignIn }}" hint-placeholder-val="{{ true }}">
+        <button style="width: 100%; background: #f4650c; color: #faf4e8; border: 2px solid #1c1b2e; border-radius: 999px; padding: 16px; font-family: 'Public Sans', sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 4px 4px 0 #1c1b2e; transition: transform 0.15s ease, box-shadow 0.15s ease; box-sizing: border-box;" style-hover="transform: translate(-2px, -2px); box-shadow: 6px 6px 0 #1c1b2e;">Sign in →</button>
+        <p style="margin: 24px 0 0 0; text-align: center; font-size: 13px; color: rgba(28,27,46,0.6);">Don't have an account? <a href="#" onClick="{{ goSignUp }}" style="font-weight: 700;">Sign up free</a></p>
+      </sc-if>
+      <sc-if value="{{ isSignUp }}" hint-placeholder-val="{{ false }}">
+        <button style="width: 100%; background: #f4650c; color: #faf4e8; border: 2px solid #1c1b2e; border-radius: 999px; padding: 16px; font-family: 'Public Sans', sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 4px 4px 0 #1c1b2e; transition: transform 0.15s ease, box-shadow 0.15s ease; box-sizing: border-box;" style-hover="transform: translate(-2px, -2px); box-shadow: 6px 6px 0 #1c1b2e;">Create account →</button>
+        <p style="margin: 24px 0 0 0; text-align: center; font-size: 13px; color: rgba(28,27,46,0.6);">Already have an account? <a href="#" onClick="{{ goSignIn }}" style="font-weight: 700;">Sign in</a></p>
+      </sc-if>
+
+    </div>
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;mode&quot;: { &quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;signin&quot;, &quot;signup&quot;], &quot;default&quot;: &quot;signin&quot;, &quot;tsType&quot;: &quot;\&quot;signin\&quot; | \&quot;signup\&quot;&quot;, &quot;section&quot;: &quot;Screen&quot; }
+}">
+class Component extends DCLogic {
+  state = { mode: null };
+
+  renderVals() {
+    const mode = this.state.mode ?? this.props.mode ?? "signin";
+    return {
+      isSignIn: mode === "signin",
+      isSignUp: mode === "signup",
+      goSignUp: (e) => { if (e) e.preventDefault(); this.setState({ mode: "signup" }); },
+      goSignIn: (e) => { if (e) e.preventDefault(); this.setState({ mode: "signin" }); },
+    };
+  }
+}
+</script>
+</body>
+</html>

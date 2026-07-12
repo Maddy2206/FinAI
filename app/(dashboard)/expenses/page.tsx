@@ -5,15 +5,14 @@ import { useQuery, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Header } from "@/components/shared/Header";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from "@/components/ui/dialog";
 import { ExpenseForm } from "@/components/expenses/ExpenseForm";
 import { NaturalLanguageInput } from "@/components/expenses/NaturalLanguageInput";
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatCurrency, formatDate, getCurrentMonth } from "@/lib/utils";
-import { CATEGORY_COLORS, CATEGORY_ICONS } from "@/types";
+import { CATEGORY_TINTS, CATEGORY_ICONS, type ExpenseCategory } from "@/types";
 import { Id } from "@/convex/_generated/dataModel";
-import { Plus, Trash2 } from "lucide-react";
+import { CalendarDays, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
 
@@ -43,93 +42,95 @@ export default function ExpensesPage() {
   return (
     <>
       <Header title="Expenses" />
-      <div className="flex-1 overflow-y-auto p-6 space-y-6">
+      <div className="flex-1 space-y-5 overflow-y-auto p-7">
         {/* Controls */}
-        <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
-          <input
-            type="month"
-            value={month}
-            onChange={(e) => setMonth(e.target.value)}
-            className="bg-card border border-border rounded-lg px-3 py-2 text-sm text-foreground"
-          />
-          <div className="flex gap-2 w-full sm:w-auto">
-            <Dialog open={open} onOpenChange={setOpen}>
-              <DialogTrigger asChild>
-                <Button size="sm" onClick={() => setPrefill(null)}>
-                  <Plus className="h-4 w-4 mr-1" /> Add Expense
-                </Button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Add Expense</DialogTitle>
-                </DialogHeader>
-                <ExpenseForm initial={prefill ?? undefined} onSuccess={() => setOpen(false)} />
-              </DialogContent>
-            </Dialog>
-          </div>
+        <div className="flex items-center justify-between">
+          <label className="flex items-center gap-2 rounded-xl border-2 border-ink bg-white px-4 py-2.5 text-sm font-bold">
+            <CalendarDays className="h-4 w-4" />
+            <input
+              type="month"
+              value={month}
+              onChange={(e) => setMonth(e.target.value)}
+              className="bg-transparent outline-none"
+            />
+          </label>
+
+          <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild>
+              <Button onClick={() => setPrefill(null)}>＋ Add expense</Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Add expense</DialogTitle>
+                <DialogDescription>
+                  Log a purchase and pick an icon to help it stand out in your feed.
+                </DialogDescription>
+              </DialogHeader>
+              <ExpenseForm initial={prefill ?? undefined} onSuccess={() => setOpen(false)} />
+            </DialogContent>
+          </Dialog>
         </div>
 
         {/* NLP input */}
-        <div className="bg-card border border-border rounded-xl p-4 space-y-2">
-          <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">
-            AI Quick Entry
-          </p>
-          <NaturalLanguageInput onParsed={handleNLPParsed} />
-        </div>
+        <NaturalLanguageInput onParsed={handleNLPParsed} />
 
         {/* Summary */}
-        <div className="flex items-center justify-between">
-          <h2 className="text-sm font-medium text-muted-foreground">
+        <div className="flex items-baseline justify-between">
+          <p className="text-[13px] font-semibold text-ink/60">
             {format(new Date(month + "-01"), "MMMM yyyy")} · {expenses?.length ?? 0} transactions
-          </h2>
-          <span className="text-sm font-semibold text-destructive">-{formatCurrency(total)}</span>
+          </p>
+          <p className="font-heading text-lg font-extrabold">−{formatCurrency(total)}</p>
         </div>
 
         {/* Expense list */}
         {expenses === undefined ? (
-          <div className="space-y-3">
-            {[...Array(5)].map((_, i) => <Skeleton key={i} className="h-16 rounded-xl" />)}
+          <div className="space-y-2.5">
+            {[...Array(5)].map((_, i) => <Skeleton key={i} className="h-16 rounded-2xl" />)}
           </div>
         ) : expenses.length === 0 ? (
-          <div className="text-center py-16 text-muted-foreground">
+          <div className="py-16 text-center text-ink/50">
             <p>No expenses in {format(new Date(month + "-01"), "MMMM yyyy")}</p>
           </div>
         ) : (
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2.5">
             {expenses.map((expense) => (
               <div
                 key={expense._id}
-                className="flex items-center gap-3 bg-card border border-border/50 rounded-xl p-4 hover:border-border transition-colors"
+                className="flex items-center gap-3.5 rounded-2xl border-2 border-ink bg-white px-4.5 py-3.5 transition-shadow hover:shadow-[3px_3px_0_var(--ink)]"
               >
                 <div
-                  className="h-10 w-10 rounded-full flex items-center justify-center text-base shrink-0"
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border-2 border-ink text-[17px]"
                   style={{
-                    backgroundColor: `${CATEGORY_COLORS[expense.category as keyof typeof CATEGORY_COLORS]}20`,
+                    backgroundColor:
+                      CATEGORY_TINTS[expense.category as ExpenseCategory] ?? "#e8e0d0",
                   }}
                 >
-                  {CATEGORY_ICONS[expense.category as keyof typeof CATEGORY_ICONS] ?? "💰"}
+                  {expense.icon ?? CATEGORY_ICONS[expense.category as ExpenseCategory] ?? "💰"}
                 </div>
 
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-foreground truncate">{expense.description}</p>
-                  <div className="flex items-center gap-2 mt-0.5">
-                    <Badge variant="secondary" className="text-xs py-0">
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-bold">{expense.description}</p>
+                  <div className="mt-0.5 flex items-center gap-2">
+                    <span className="rounded-full border-2 border-ink bg-cream px-2.5 py-0.5 text-[11px] font-bold">
                       {expense.category}
-                    </Badge>
-                    <span className="text-xs text-muted-foreground">{formatDate(expense.date)}</span>
+                    </span>
+                    <span className="text-xs text-ink/55">{formatDate(expense.date)}</span>
                     {expense.isRecurring && (
-                      <Badge variant="outline" className="text-xs py-0">Recurring</Badge>
+                      <span className="rounded-full border-2 border-orange px-2.5 py-0.5 text-[11px] font-bold text-orange">
+                        Recurring
+                      </span>
                     )}
                   </div>
                 </div>
 
-                <span className="text-sm font-semibold text-destructive shrink-0">
-                  -{formatCurrency(expense.amount)}
+                <span className="shrink-0 text-[15px] font-bold">
+                  −{formatCurrency(expense.amount)}
                 </span>
 
                 <button
                   onClick={() => handleDelete(expense._id)}
-                  className="text-muted-foreground hover:text-destructive transition-colors shrink-0 ml-1"
+                  className="ml-1 shrink-0 text-ink/40 transition-colors hover:text-danger"
+                  aria-label="Delete expense"
                 >
                   <Trash2 className="h-4 w-4" />
                 </button>

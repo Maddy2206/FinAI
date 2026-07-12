@@ -52,6 +52,16 @@ export const updateReceiptData = mutation({
   },
 });
 
+export const deleteReceipt = mutation({
+  args: { id: v.id("receipts") },
+  handler: async (ctx, args) => {
+    const user = await getAuthUser(ctx);
+    const receipt = await ctx.db.get(args.id);
+    if (!receipt || receipt.userId !== user._id) throw new Error("Not found");
+    await ctx.db.delete(args.id);
+  },
+});
+
 export const getReceiptsByUser = query({
   args: {},
   handler: async (ctx) => {

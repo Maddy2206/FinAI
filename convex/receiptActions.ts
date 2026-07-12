@@ -3,6 +3,19 @@ import { action } from "./_generated/server";
 import { v } from "convex/values";
 import { api } from "./_generated/api";
 
+const VALID_CATEGORIES = [
+  "Food", "Travel", "Shopping", "Rent", "Utilities",
+  "Entertainment", "Healthcare", "Subscriptions", "Other",
+] as const;
+type ValidCategory = (typeof VALID_CATEGORIES)[number];
+
+function normalizeCategory(raw: unknown): ValidCategory {
+  const match = VALID_CATEGORIES.find(
+    (c) => c.toLowerCase() === String(raw).toLowerCase()
+  );
+  return match ?? "Other";
+}
+
 export const processReceiptOCR = action({
   args: {
     receiptId: v.id("receipts"),
@@ -10,6 +23,11 @@ export const processReceiptOCR = action({
   },
   handler: async (ctx, args) => {
     // Step 1: OCR.space OCR (free tier: 25,000 req/month at ocr.space)
+    if (!process.env.OCR_SPACE_API_KEY) {
+      console.warn(
+        "[processReceiptOCR] OCR_SPACE_API_KEY is not set in the Convex deployment env — falling back to the shared 'helloworld' demo key, which is heavily rate-limited and will fail unpredictably. Set it with `npx convex env set OCR_SPACE_API_KEY <key>`."
+      );
+    }
     let rawOcrText = "";
     try {
       const ocrRes = await fetch("https://api.ocr.space/parse/imageurl", {
@@ -28,13 +46,29 @@ export const processReceiptOCR = action({
         }).toString(),
       });
       const ocrData = await ocrRes.json();
+      if (!ocrRes.ok || ocrData?.IsErroredOnProcessing) {
+        console.error(
+          "[processReceiptOCR] OCR.space request failed",
+          JSON.stringify({
+            httpStatus: ocrRes.status,
+            errorMessage: ocrData?.ErrorMessage,
+            errorDetails: ocrData?.ErrorDetails,
+            fileUrl: args.fileUrl,
+          })
+        );
+      }
       rawOcrText =
         ocrData?.ParsedResults?.[0]?.ParsedText ?? "";
-    } catch {
+    } catch (err) {
+      console.error("[processReceiptOCR] OCR.space fetch threw:", err);
       rawOcrText = "";
     }
 
     if (!rawOcrText) {
+      console.error(
+        "[processReceiptOCR] No text extracted from receipt; marking failed.",
+        { receiptId: args.receiptId, fileUrl: args.fileUrl }
+      );
       await ctx.runMutation(api.receipts.updateReceiptData, {
         id: args.receiptId,
         rawOcrText: "",
@@ -51,6 +85,11 @@ export const processReceiptOCR = action({
     }
 
     // Step 2: Groq structures the OCR text
+    if (!process.env.GROQ_API_KEY) {
+      console.warn(
+        "[processReceiptOCR] GROQ_API_KEY is not set in the Convex deployment env — Groq calls will fail. Set it with `npx convex env set GROQ_API_KEY <key>`."
+      );
+    }
     const Groq = (await import("groq-sdk")).default;
     const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
@@ -72,12 +111,18 @@ Category must be one of: Food, Travel, Shopping, Rent, Utilities, Entertainment,
 For totalAmount, extract the final total in numbers only (Indian Rupees).
 If date is unclear, use today's date.`;
 
-    let extractedData = {
+    let extractedData: {
+      merchant: string;
+      totalAmount: number;
+      date: string;
+      items: { name: string; price: number }[];
+      category: ValidCategory;
+    } = {
       merchant: "Unknown",
       totalAmount: 0,
       date: new Date().toISOString().split("T")[0],
-      items: [] as { name: string; price: number }[],
-      category: "Other" as const,
+      items: [],
+      category: "Other",
     };
 
     try {
@@ -94,31 +139,41 @@ If date is unclear, use today's date.`;
           merchant: parsed.merchant ?? "Unknown",
           totalAmount: Number(parsed.totalAmount) || 0,
           date: parsed.date ?? new Date().toISOString().split("T")[0],
-          items: parsed.items ?? [],
-          category: parsed.category ?? "Other",
+          items: Array.isArray(parsed.items) ? parsed.items : [],
+          category: normalizeCategory(parsed.category),
         };
       }
-    } catch {
-      // keep defaults
+    } catch (err) {
+      console.error("[processReceiptOCR] Groq call/parse failed, using defaults:", err);
     }
 
-    await ctx.runMutation(api.receipts.updateReceiptData, {
-      id: args.receiptId,
-      rawOcrText,
-      extractedData,
-      status: "done",
-    });
+    try {
+      await ctx.runMutation(api.receipts.updateReceiptData, {
+        id: args.receiptId,
+        rawOcrText,
+        extractedData,
+        status: "done",
+      });
 
-    // Auto-create expense from receipt
-    if (extractedData.totalAmount > 0) {
-      await ctx.runMutation(api.expenses.addExpense, {
-        amount: extractedData.totalAmount,
-        category: extractedData.category,
-        description: extractedData.merchant,
-        date: new Date(extractedData.date).getTime(),
-        isRecurring: false,
-        receiptId: args.receiptId,
-        source: "ocr",
+      // Auto-create expense from receipt
+      if (extractedData.totalAmount > 0) {
+        await ctx.runMutation(api.expenses.addExpense, {
+          amount: extractedData.totalAmount,
+          category: extractedData.category,
+          description: extractedData.merchant,
+          date: new Date(extractedData.date).getTime(),
+          isRecurring: false,
+          receiptId: args.receiptId,
+          source: "ocr",
+        });
+      }
+    } catch (err) {
+      console.error("[processReceiptOCR] Failed to save extracted data / create expense:", err);
+      await ctx.runMutation(api.receipts.updateReceiptData, {
+        id: args.receiptId,
+        rawOcrText,
+        extractedData,
+        status: "failed",
       });
     }
   },

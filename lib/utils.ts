@@ -37,3 +37,19 @@ export function getMonthRange(monthStr: string): { start: number; end: number } 
 export function clampScore(score: number): number {
   return Math.min(100, Math.max(0, score))
 }
+
+export function budgetUsageLevel(pct: number): "success" | "warning" | "danger" {
+  if (pct >= 90) return "danger"
+  if (pct >= 70) return "warning"
+  return "success"
+}
+
+export function stripeGradient(level: "success" | "warning" | "danger"): string {
+  if (level === "danger") {
+    return "repeating-linear-gradient(45deg, #d92d20, #d92d20 7px, #f4650c 7px, #f4650c 14px)"
+  }
+  if (level === "warning") {
+    return "repeating-linear-gradient(45deg, #d97706, #d97706 7px, #ffb02e 7px, #ffb02e 14px)"
+  }
+  return "repeating-linear-gradient(45deg, #1e9e6a, #1e9e6a 7px, #6cc9a1 7px, #6cc9a1 14px)"
+}

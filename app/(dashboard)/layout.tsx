@@ -23,7 +23,7 @@ export default function DashboardLayout({
   return (
     <div className="flex h-screen bg-background">
       {/* Desktop Sidebar */}
-      <aside className="hidden lg:flex w-64 shrink-0 flex-col">
+      <aside className="hidden lg:flex shrink-0 flex-col">
         <Sidebar />
       </aside>
 

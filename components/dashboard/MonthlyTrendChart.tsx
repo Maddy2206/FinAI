@@ -1,87 +1,57 @@
 "use client";
 
-import {
-  ComposedChart,
-  Bar,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { formatCurrency } from "@/lib/utils";
 import { format } from "date-fns";
+import { formatCurrency } from "@/lib/utils";
+import { useState } from "react";
 
 interface MonthlyTrendChartProps {
   data: { month: string; total: number }[];
 }
 
-interface CustomTooltipProps {
-  active?: boolean;
-  payload?: Array<{ value: number }>;
-  label?: string;
-}
-
-const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
-  if (active && payload && payload.length && label) {
-    const [year, month] = label.split("-");
-    const date = new Date(Number(year), Number(month) - 1);
-    return (
-      <div className="bg-card border border-border rounded-lg px-3 py-2 shadow-lg">
-        <p className="text-xs text-muted-foreground">{format(date, "MMMM yyyy")}</p>
-        <p className="text-sm font-semibold text-primary">{formatCurrency(payload[0]?.value ?? 0)}</p>
-      </div>
-    );
-  }
-  return null;
-};
-
 export function MonthlyTrendChart({ data }: MonthlyTrendChartProps) {
-  const chartData = data.map((d) => ({
-    ...d,
-    label: d.month.slice(5), // "MM" portion
-  }));
+  const [hovered, setHovered] = useState<number | null>(null);
+  const max = Math.max(...data.map((d) => d.total), 1);
 
   return (
-    <Card className="border-border/50">
-      <CardHeader>
-        <CardTitle className="text-base font-semibold">12-Month Spending Trend</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <ResponsiveContainer width="100%" height={220}>
-          <ComposedChart data={chartData} margin={{ top: 5, right: 5, bottom: 5, left: 0 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
-            <XAxis
-              dataKey="month"
-              tickFormatter={(v) => {
-                const [, m] = v.split("-");
-                return format(new Date(2024, Number(m) - 1), "MMM");
-              }}
-              tick={{ fontSize: 11, fill: "var(--muted-foreground)" }}
-              axisLine={false}
-              tickLine={false}
-            />
-            <YAxis
-              tickFormatter={(v) => `₹${v >= 1000 ? (v / 1000).toFixed(0) + "k" : v}`}
-              tick={{ fontSize: 11, fill: "var(--muted-foreground)" }}
-              axisLine={false}
-              tickLine={false}
-              width={45}
-            />
-            <Tooltip content={<CustomTooltip />} cursor={{ fill: "var(--accent)" }} />
-            <Bar dataKey="total" fill="var(--primary)" radius={[4, 4, 0, 0]} opacity={0.8} />
-            <Line
-              type="monotone"
-              dataKey="total"
-              stroke="var(--primary)"
-              strokeWidth={2}
-              dot={false}
-            />
-          </ComposedChart>
-        </ResponsiveContainer>
-      </CardContent>
-    </Card>
+    <div className="rounded-[18px] border-2 border-ink bg-white p-6">
+      <p className="mb-5 font-heading text-base font-bold">Monthly trend</p>
+      <div className="relative flex h-[150px] items-end gap-2.5">
+        {data.map((d, i) => {
+          const isCurrent = i === data.length - 1;
+          const [, m] = d.month.split("-");
+          const heightPct = Math.max(4, (d.total / max) * 100);
+          return (
+            <div
+              key={d.month}
+              className="flex h-full flex-1 flex-col items-center justify-end gap-1.5"
+              onMouseEnter={() => setHovered(i)}
+              onMouseLeave={() => setHovered((h) => (h === i ? null : h))}
+            >
+              {hovered === i && (
+                <div className="absolute -translate-y-8 rounded-[10px] border-2 border-ink bg-white px-2.5 py-1 text-xs font-bold shadow-[2px_2px_0_var(--ink)]">
+                  {formatCurrency(d.total)}
+                </div>
+              )}
+              <div
+                className="w-full rounded-t-[6px] border-2 border-b-0 border-ink"
+                style={{
+                  height: `${heightPct}%`,
+                  backgroundColor: isCurrent ? "#f4650c" : "#e8e0d0",
+                }}
+              />
+              <span
+                className={
+                  isCurrent
+                    ? "text-[10px] font-extrabold text-ink"
+                    : "text-[10px] font-bold text-ink/50"
+                }
+              >
+                {format(new Date(2024, Number(m) - 1), "MMM")}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+    </div>
   );
 }

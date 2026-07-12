@@ -1,6 +1,5 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
 interface FinancialHealthScoreProps {
@@ -9,72 +8,44 @@ interface FinancialHealthScoreProps {
 
 export function FinancialHealthScore({ score }: FinancialHealthScoreProps) {
   const clampedScore = Math.min(100, Math.max(0, score));
-  const radius = 52;
-  const circumference = 2 * Math.PI * radius;
-  const progress = (clampedScore / 100) * circumference;
-  const offset = circumference - progress;
 
-  const getColor = () => {
-    if (clampedScore >= 80) return "#22c55e";
-    if (clampedScore >= 60) return "#f59e0b";
-    return "#ef4444";
-  };
-
-  const getLabel = () => {
-    if (clampedScore >= 80) return "Excellent";
-    if (clampedScore >= 60) return "Good";
-    if (clampedScore >= 40) return "Fair";
-    return "Needs Work";
-  };
+  const color =
+    clampedScore >= 80 ? "#1e9e6a" : clampedScore >= 60 ? "#d97706" : "#d92d20";
+  const label =
+    clampedScore >= 80
+      ? "Excellent"
+      : clampedScore >= 60
+        ? "Good"
+        : clampedScore >= 40
+          ? "Fair"
+          : "Needs work";
 
   return (
-    <Card className="border-border/50">
-      <CardHeader>
-        <CardTitle className="text-base font-semibold">Financial Health Score</CardTitle>
-      </CardHeader>
-      <CardContent className="flex flex-col items-center justify-center py-2">
-        <div className="relative">
-          <svg width="140" height="140" viewBox="0 0 140 140">
-            {/* Track */}
-            <circle
-              cx="70"
-              cy="70"
-              r={radius}
-              fill="none"
-              stroke="var(--border)"
-              strokeWidth="10"
-            />
-            {/* Progress */}
-            <circle
-              cx="70"
-              cy="70"
-              r={radius}
-              fill="none"
-              stroke={getColor()}
-              strokeWidth="10"
-              strokeLinecap="round"
-              strokeDasharray={circumference}
-              strokeDashoffset={offset}
-              transform="rotate(-90 70 70)"
-              style={{ transition: "stroke-dashoffset 1s ease-in-out" }}
-            />
-          </svg>
-          <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <span className="text-3xl font-bold text-foreground">{clampedScore}</span>
-            <span className="text-xs text-muted-foreground">/ 100</span>
-          </div>
+    <div className="flex flex-col items-center rounded-[18px] border-2 border-ink bg-white p-6 shadow-[4px_4px_0_var(--marigold)]">
+      <p className="mb-4 self-start font-heading text-base font-bold">Financial health</p>
+      <div
+        className="flex h-[130px] w-[130px] items-center justify-center rounded-full"
+        style={{
+          background: `conic-gradient(${color} 0% ${clampedScore}%, #e8e0d0 ${clampedScore}% 100%)`,
+        }}
+      >
+        <div className="flex h-24 w-24 flex-col items-center justify-center rounded-full border-2 border-ink bg-white">
+          <span className="font-heading text-[32px] font-extrabold leading-none">
+            {clampedScore}
+          </span>
+          <span className="text-[11px] font-semibold text-ink/50">/ 100</span>
         </div>
-        <div
-          className={cn(
-            "mt-2 px-3 py-1 rounded-full text-sm font-medium",
-            clampedScore >= 80 && "bg-green-500/10 text-green-500",
-            clampedScore >= 60 && clampedScore < 80 && "bg-yellow-500/10 text-yellow-500",
-            clampedScore < 60 && "bg-destructive/10 text-destructive"
-          )}
-        >
-          {getLabel()}
-        </div>
-      </CardContent>
-    </Card>
+      </div>
+      <span
+        className={cn(
+          "mt-4 rounded-full border-2 border-ink px-4 py-1 text-[13px] font-bold",
+          clampedScore >= 80 && "bg-success-tint text-success",
+          clampedScore >= 60 && clampedScore < 80 && "bg-warning-tint text-warning",
+          clampedScore < 60 && "bg-danger-tint text-danger"
+        )}
+      >
+        {label} {clampedScore >= 80 && "✓"}
+      </span>
+    </div>
   );
 }

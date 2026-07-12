@@ -22,26 +22,38 @@ export const EXPENSE_CATEGORIES: ExpenseCategory[] = [
 ];
 
 export const CATEGORY_COLORS: Record<ExpenseCategory, string> = {
-  Food: "#6366f1",
-  Travel: "#22c55e",
-  Shopping: "#f59e0b",
-  Rent: "#ef4444",
-  Utilities: "#06b6d4",
-  Entertainment: "#a855f7",
-  Healthcare: "#ec4899",
-  Subscriptions: "#f97316",
-  Other: "#64748b",
+  Food: "#f4650c",
+  Shopping: "#ffb02e",
+  Utilities: "#1c1b2e",
+  Travel: "#1e9e6a",
+  Subscriptions: "#8d86c9",
+  Rent: "#d92d20",
+  Entertainment: "#d97706",
+  Healthcare: "#6cc9a1",
+  Other: "#a89f8a",
+};
+
+export const CATEGORY_TINTS: Record<ExpenseCategory, string> = {
+  Food: "#fde3d3",
+  Shopping: "#ffedc7",
+  Utilities: "#e8e0d0",
+  Travel: "#d9f2e5",
+  Subscriptions: "#e3e0f2",
+  Rent: "#fbdcd6",
+  Entertainment: "#fff3d6",
+  Healthcare: "#d9f2e5",
+  Other: "#e8e0d0",
 };
 
 export const CATEGORY_ICONS: Record<ExpenseCategory, string> = {
-  Food: "🍽️",
-  Travel: "✈️",
-  Shopping: "🛍️",
+  Food: "🍕",
+  Travel: "🚗",
+  Shopping: "🛒",
   Rent: "🏠",
-  Utilities: "💡",
+  Utilities: "⚡",
   Entertainment: "🎬",
   Healthcare: "🏥",
-  Subscriptions: "📱",
+  Subscriptions: "📺",
   Other: "💰",
 };
 

@@ -1,8 +1,7 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatCurrency, formatDate } from "@/lib/utils";
-import { CATEGORY_COLORS, CATEGORY_ICONS } from "@/types";
+import { CATEGORY_TINTS, CATEGORY_ICONS, type ExpenseCategory } from "@/types";
 import Link from "next/link";
 
 interface Transaction {
@@ -11,6 +10,7 @@ interface Transaction {
   category: string;
   description: string;
   date: number;
+  icon?: string;
 }
 
 interface RecentTransactionsProps {
@@ -19,38 +19,48 @@ interface RecentTransactionsProps {
 
 export function RecentTransactions({ transactions }: RecentTransactionsProps) {
   return (
-    <Card className="border-border/50">
-      <CardHeader className="flex flex-row items-center justify-between pb-2">
-        <CardTitle className="text-base font-semibold">Recent Transactions</CardTitle>
-        <Link href="/expenses" className="text-xs text-primary hover:underline">View all</Link>
-      </CardHeader>
-      <CardContent>
-        {transactions.length === 0 ? (
-          <p className="text-sm text-muted-foreground text-center py-6">No transactions yet</p>
-        ) : (
-          <div className="space-y-3">
-            {transactions.map((tx) => (
-              <div key={tx._id} className="flex items-center gap-3">
-                <div
-                  className="h-9 w-9 rounded-full flex items-center justify-center text-sm shrink-0"
-                  style={{
-                    backgroundColor: `${CATEGORY_COLORS[tx.category as keyof typeof CATEGORY_COLORS]}20`,
-                  }}
-                >
-                  {CATEGORY_ICONS[tx.category as keyof typeof CATEGORY_ICONS] ?? "💰"}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-foreground truncate">{tx.description}</p>
-                  <p className="text-xs text-muted-foreground">{tx.category} • {formatDate(tx.date)}</p>
-                </div>
-                <span className="text-sm font-semibold text-destructive shrink-0">
-                  -{formatCurrency(tx.amount)}
-                </span>
+    <div className="rounded-[18px] border-2 border-ink bg-white p-6">
+      <div className="mb-4 flex items-baseline justify-between">
+        <p className="font-heading text-base font-bold">Recent transactions</p>
+        <Link href="/expenses" className="text-[13px] font-bold text-orange hover:text-ink">
+          View all →
+        </Link>
+      </div>
+      {transactions.length === 0 ? (
+        <p className="py-6 text-center text-sm text-ink/50">No transactions yet</p>
+      ) : (
+        <div className="flex flex-col">
+          {transactions.map((tx, i) => (
+            <div
+              key={tx._id}
+              className={
+                i < transactions.length - 1
+                  ? "flex items-center gap-3.5 border-b-2 border-ink/[0.08] py-3"
+                  : "flex items-center gap-3.5 py-3"
+              }
+            >
+              <div
+                className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-xl border-2 border-ink text-base"
+                style={{
+                  backgroundColor:
+                    CATEGORY_TINTS[tx.category as ExpenseCategory] ?? "#e8e0d0",
+                }}
+              >
+                {tx.icon ?? CATEGORY_ICONS[tx.category as ExpenseCategory] ?? "💰"}
               </div>
-            ))}
-          </div>
-        )}
-      </CardContent>
-    </Card>
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-sm font-bold">{tx.description}</p>
+                <p className="text-xs text-ink/55">
+                  {tx.category} · {formatDate(tx.date)}
+                </p>
+              </div>
+              <span className="shrink-0 text-sm font-bold">
+                −{formatCurrency(tx.amount)}
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
   );
 }
